@@ -73,7 +73,7 @@ export const InputContainer = styled.div.attrs(
     background-color: transparent;
     &::placeholder {
       color: #cccccc;
-      opacity: 0.6;
+      /* opacity: 0.6; */
     }
   }
 `

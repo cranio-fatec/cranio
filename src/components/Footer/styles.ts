@@ -16,7 +16,7 @@ export const Content = styled.div`
 
   a {
     font-weight: 500;
-    font-size: 24px;
+    font-size: 20px;
     line-height: 30px;
 
     text-align: center;
@@ -34,6 +34,7 @@ export const LeftWrapper = styled.div`
   height: 100%;
 
   img {
+    cursor: pointer;
   }
 
   /* a {
