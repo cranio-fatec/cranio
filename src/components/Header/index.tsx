@@ -1,4 +1,5 @@
 import { useSession } from 'next-auth/client'
+import Head from 'next/head'
 import React, { useRef, useState } from 'react'
 import { MdSearch } from 'react-icons/md'
 import useOutsideClick from '../../hooks/useOutsideClick'
@@ -15,8 +16,9 @@ import {
   UserDataContainer,
   UserDataContent
 } from './styles'
+import { HeaderProps } from './types'
 
-const Header: React.FC = () => {
+const Header: React.FC<HeaderProps> = ({ title }) => {
   const profilePopoutRef = useRef<any>(null)
   const [isProfilePopoutOpen, setIsProfilePopoutOpen] = useState(false)
   const [session] = useSession()
@@ -27,12 +29,14 @@ const Header: React.FC = () => {
   useOutsideClick(profilePopoutRef, () => {
     if (isProfilePopoutOpen) {
       setIsProfilePopoutOpen(false)
-      console.log('outside')
     }
   })
 
   return (
     <Container>
+      <Head>
+        <title>{title ? `${title} - Crânio` : 'Crânio'}</title>
+      </Head>
       <Content>
         <img src="cranio.png" alt="Crânio" />
         <nav>

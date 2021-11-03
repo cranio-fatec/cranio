@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { containerCenter } from '../../styles/utils/containerCenter'
 
-export const Container = styled.div`
+export const Container = styled.header`
   background-color: ${({ theme }) => theme.colors.blue_0};
   height: 83px;
 `
