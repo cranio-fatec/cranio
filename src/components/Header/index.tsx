@@ -1,4 +1,4 @@
-import { useSession } from 'next-auth/client'
+import { useSession } from 'next-auth/react'
 import Head from 'next/head'
 import React, { useRef, useState } from 'react'
 import { MdSearch } from 'react-icons/md'
@@ -21,10 +21,23 @@ import { HeaderProps } from './types'
 const Header: React.FC<HeaderProps> = ({ title }) => {
   const profilePopoutRef = useRef<any>(null)
   const [isProfilePopoutOpen, setIsProfilePopoutOpen] = useState(false)
-  const [session] = useSession()
+  const { data: session } = useSession()
+  console.log('Sessão', session)
 
-  const nameArr = session ? session.user.name.split('/')[0].split(' ') : ''
-  const fullName = session ? `${nameArr[0]} ${nameArr[1]}` : ''
+  const nameArr = session
+    ? (session.user as any).username.split('/')[0].split(' ')
+    : []
+  // const nameArr = ['teste', 'a']
+  const fullName = session
+    ? nameArr.length > 1
+      ? `${nameArr[0]} ${nameArr[1]}`
+      : `${nameArr[0]}`
+    : ''
+  const acronym = session
+    ? nameArr.length > 1
+      ? `${nameArr[0][0]}${nameArr[1][0]}`.toUpperCase()
+      : `${nameArr[0][0]}${nameArr[0][1]}`.toUpperCase()
+    : ''
 
   useOutsideClick(profilePopoutRef, () => {
     if (isProfilePopoutOpen) {
@@ -62,7 +75,14 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
           <UserDataContainer>
             <UserDataContent onClick={() => setIsProfilePopoutOpen(true)}>
               <strong>{fullName}</strong>
-              <img src={session.user.image} alt={session.user.name} />
+
+              <div className="icon-container">
+                {session.user.image ? (
+                  <img src={session.user.image} alt={session.user.username} />
+                ) : (
+                  acronym
+                )}
+              </div>
             </UserDataContent>
             <ProfilePopout
               isOpen={isProfilePopoutOpen}

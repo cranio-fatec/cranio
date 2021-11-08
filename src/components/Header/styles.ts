@@ -56,10 +56,23 @@ export const UserDataContent = styled.div`
   align-items: center;
   user-select: none;
   cursor: pointer;
-  img {
+
+  .icon-container {
+    font-size: 20px;
+    background-color: ${({ theme }) => theme.colors.blue_2};
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
     width: 60px;
     height: 60px;
+    img {
+      width: 100%;
+      height: 100%;
+    }
   }
 
   strong {

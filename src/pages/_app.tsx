@@ -5,6 +5,7 @@ import { ThemeProvider } from 'styled-components'
 import Modal from 'react-modal'
 import Router from 'next/router'
 
+import { SessionProvider } from 'next-auth/react'
 import GlobalStyle from '../styles/global'
 import theme from '../styles/theme'
 
@@ -28,7 +29,9 @@ Router.events.on('routeChangeError', () => {
 const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
   return (
     <ThemeProvider theme={theme}>
-      <Component {...pageProps} />
+      <SessionProvider>
+        <Component {...pageProps} />
+      </SessionProvider>
       <GlobalStyle />
     </ThemeProvider>
   )

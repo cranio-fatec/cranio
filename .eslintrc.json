@@ -26,6 +26,8 @@
     "react/prop-types": "off",
     "import/order": "error",
 
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+
     "react/jsx-one-expression-per-line": "off",
     "react/jsx-props-no-spreading": "off",
     "react-hooks/rules-of-hooks": "error",

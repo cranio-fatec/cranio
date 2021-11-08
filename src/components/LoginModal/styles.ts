@@ -37,6 +37,9 @@ export const Container = styled.div`
       color: white;
     }
   }
+  label {
+    color: white;
+  }
 
   > svg {
     position: absolute;
@@ -77,7 +80,7 @@ export const ButtonsContainer = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
   button {
     flex: 1;
     letter-spacing: 1px;

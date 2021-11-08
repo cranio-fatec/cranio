@@ -20,6 +20,11 @@ const buttonSchemas: { [name: string]: Theme } = {
     background: colors.yellow,
     hoverBackground: shade(0.1, colors.yellow)
   },
+  darkblue: {
+    text: 'white',
+    background: colors.blue_1,
+    hoverBackground: shade(0.1, colors.blue_1)
+  },
   secondary: {
     text: 'black',
     background: 'white',

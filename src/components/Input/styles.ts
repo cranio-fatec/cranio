@@ -5,7 +5,7 @@ import theme from '../../styles/theme'
 
 import { BaseInputProps } from './types'
 
-const variantThemeColor = theme.colors.grey_3
+const variantThemeColor = theme.colors.text
 const variantThemeColorHighlight = '#ffffff'
 
 const outlined = css`
@@ -38,7 +38,7 @@ export const InputContainer = styled.div.attrs(
   ${({ isFocused, theme }) =>
     isFocused &&
     css`
-  box-shadow: 0 0 0 1px ${theme.colors.grey_3}};`}
+  box-shadow: 0 0 0 1px ${theme.colors.blue_0} !important} ;`}
   ${({ maxWidth }) => `max-width: ${maxWidth};`}
   ${({ theme, isErrored }) =>
     isErrored && `border-color: ${theme.colors.red} !important;`};
@@ -56,14 +56,14 @@ export const InputContainer = styled.div.attrs(
     `}
 
   &:hover {
-    border: 1px solid ${variantThemeColor};
+    border: 1px solid ${({ theme }) => theme.colors.blue_0};
   }
 
   input {
     color: ${props => props.theme.colors.text};
     width: 100%;
     height: 100%;
-    font-size: 16px;
+    font-size: 14px;
     line-height: 17px;
     padding: 0;
     padding-left: 1em;

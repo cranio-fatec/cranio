@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components'
 import { LabelStyleProps } from './types'
 
 export const Label = styled.label<LabelStyleProps>`
-  color: ${({ theme }) => theme.colors.yellow};
+  color: ${({ theme }) => theme.colors.text};
   ${({ margin }) =>
     margin
       ? css`

@@ -1,89 +1,174 @@
 import { query as q } from 'faunadb'
+import { NextApiRequest, NextApiResponse } from 'next'
 
 import NextAuth from 'next-auth'
-import Providers from 'next-auth/providers'
+import GoogleProvider from 'next-auth/providers/google'
+import CredentialsProvider from 'next-auth/providers/credentials'
+import nookies from 'nookies'
+import { compare } from 'bcryptjs'
 
 import { fauna } from '../../../services/fauna'
 
-export default NextAuth({
-  providers: [
-    Providers.Google({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET
-    }),
-    Providers.Credentials({
-      // The name to display on the sign in form (e.g. 'Sign in with...')
-      name: 'Crânio',
-      // The credentials is used to generate a suitable form on the sign in page.
-      // You can specify whatever fields you are expecting to be submitted.
-      // e.g. domain, username, password, 2FA token, etc.
-      // You can pass any HTML attribute to the <input> tag through the object.
-      credentials: {
-        email: {
-          label: 'E-mail',
-          type: 'text',
-          placeholder: 'Digite seu e-mail...'
+export default function nextAuth(
+  req: NextApiRequest,
+  res: NextApiResponse
+): void | Promise<void> {
+  return NextAuth(req, res, {
+    providers: [
+      GoogleProvider({
+        clientId: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET
+      }),
+      CredentialsProvider({
+        // The name to display on the sign in form (e.g. 'Sign in with...')
+        name: 'Crânio',
+        // The credentials is used to generate a suitable form on the sign in page.
+        // You can specify whatever fields you are expecting to be submitted.
+        // e.g. domain, username, password, 2FA token, etc.
+        // You can pass any HTML attribute to the <input> tag through the object.
+        credentials: {
+          email: {
+            label: 'E-mail',
+            type: 'text',
+            placeholder: 'Digite seu e-mail...'
+          },
+          password: {
+            label: 'Senha',
+            type: 'password',
+            placeholder: 'Digite sua senha...'
+          }
         },
-        password: {
-          label: 'Senha',
-          type: 'password',
-          placeholder: 'Digite sua senha...'
-        }
-      },
-      async authorize(credentials, req) {
-        // Add logic here to look up the user from the credentials supplied
-        const user = { id: 1, name: 'J Smith', email: 'jsmith@example.com' }
+        async authorize(credentials, req) {
+          const response = await fauna
+            .query<{
+              ref: { id: string }
+              data: Record<string, any>
+            }>(
+              q.If(
+                q.Exists(
+                  q.Match(
+                    q.Index('user_by_email'),
+                    q.Casefold(credentials.email)
+                  )
+                ),
+                q.Get(
+                  q.Match(
+                    q.Index('user_by_email'),
+                    q.Casefold(credentials.email)
+                  )
+                ),
+                q.Abort('Incorrect email/password combination.')
+              )
+            )
+            .catch(err => {
+              throw Error(err.description)
+            })
 
-        if (user) {
-          // Any object returned will be saved in `user` property of the JWT
-          return user
-        } else {
-          // If you return null or false then the credentials will be rejected
-          return null
-          // You can also Reject this callback with an Error or with a URL:
-          // throw new Error('error message') // Redirect to error page
-          // throw '/path/to/redirect'        // Redirect to a URL
-        }
-      }
-    })
-  ],
-  callbacks: {
-    async signIn(user, account, profile) {
-      const { email } = user
-
-      console.log(account.provider)
-      if (account.provider === 'google') {
-        try {
-          // await fauna.query(
-          //   q.If(
-          //     q.Not(
-          //       q.Exists(
-          //         q.Match(q.Index('user_by_email'), q.Casefold(user.email))
-          //       )
-          //     ),
-          //     q.Create(q.Collection('users'), { data: { email } }),
-          //     q.Get(q.Match(q.Index('user_by_email'), q.Casefold(user.email)))
+          // const response = await fauna.query<{ data: Record<string, any> }>(
+          //   q.Get(
+          //     q.Map(
+          //       q.Paginate(
+          //         q.Join(
+          //           q.Match(
+          //             q.Index('spellbooks_by_owner'),
+          //             q.Ref(q.Collection('characters'), '181388642114077184')
+          //           ),
+          //           q.Index('spells_by_spellbook')
+          //         )
+          //       ),
+          //       q.Lambda('ref', q.Get(q.Var('ref')))
+          //     )
           //   )
           // )
 
-          const userExists = await fauna.query(
-            q.Exists(q.Match(q.Index('user_by_email'), q.Casefold(email)))
-          )
-          if (userExists) {
-            return true
+          const user = { ...response.data, id: response.ref.id } as Record<
+            string,
+            any
+          >
+
+          if (user) {
+            if (!user.isGoogle) {
+              const passwordMatched = await compare(
+                credentials.password,
+                user.password
+              )
+
+              if (!passwordMatched) {
+                throw new Error('Incorrect email/password combination.')
+              }
+            } else if (credentials.password) {
+              throw new Error('E-mail is registered with Google OAuth.')
+            }
+
+            delete user.password
+            return user
           }
-
-          return '/signup'
-        } catch (err) {
-          console.log(err)
-          return false
+          throw new Error('Incorrect email/password combination.')
         }
-      } else if (account.provider === undefined) {
-        console.log(user)
-        return false
-      }
+      })
+    ],
 
-      return false
+    callbacks: {
+      async signIn({ user, account, profile }) {
+        const { email } = user
+        console.log('user, ', user)
+
+        if (account.provider === 'google') {
+          try {
+            // await fauna.query(
+            //   q.If(
+            //     q.Not(
+            //       q.Exists(
+            //         q.Match(q.Index('user_by_email'), q.Casefold(user.email))
+            //       )
+            //     ),
+            //     q.Create(q.Collection('users'), { data: { email } }),
+            //     q.Get(q.Match(q.Index('user_by_email'), q.Casefold(user.email)))
+            //   )
+            // )
+
+            let isGoogle = false
+            try {
+              const { data: userData } = await fauna.query<{
+                data: Record<string, any>
+              }>(q.Get(q.Match(q.Index('user_by_email'), q.Casefold(email))))
+
+              console.log('userData', userData)
+              isGoogle = userData && userData.isGoogle
+            } catch {
+              //
+            }
+
+            nookies.set(
+              { res },
+              `cranio.pendentGoogleSign${isGoogle ? 'in' : 'up'}Data`,
+              JSON.stringify(user),
+              {
+                maxAge: 30 * 24 * 60 * 60,
+                path: '/'
+              }
+            )
+
+            return '/sign-redirect'
+          } catch (err) {
+            console.log(err)
+            return false
+          }
+        } else if (account.provider === 'credentials') {
+          console.log('credentials', user)
+          return true
+        }
+
+        return false
+      },
+      jwt: async ({ token, user }) => {
+        user && (token.user = user)
+        return token
+      },
+      session: async ({ session, token }) => {
+        session.user = token.user as any
+        return session
+      }
     }
-  }
-})
+  })
+}

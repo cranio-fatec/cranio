@@ -79,7 +79,7 @@ const Input = (
     mask && maskDict[mask === 'phone' && isCellphone ? 'cellphone' : mask]
 
   return (
-    <Styled.Container>
+    <Styled.Container className="input-container">
       {!!label && <Label required={labelRequired}>{label}</Label>}
       <Styled.InputContainer
         isErrored={isErrored}

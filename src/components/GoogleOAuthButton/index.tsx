@@ -17,6 +17,7 @@ export const GoogleOAuthButton: React.FC<ButtonProps> = ({
       color={color}
       width={width}
       margin={margin}
+      type="button"
     >
       <Styled.Google />
       {children}

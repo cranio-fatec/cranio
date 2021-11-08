@@ -2,7 +2,7 @@ import React, { forwardRef } from 'react'
 import { FaUser, FaUserCog } from 'react-icons/fa'
 import { IoMdDocument } from 'react-icons/io'
 import { MdLogout } from 'react-icons/md'
-import { signOut } from 'next-auth/client'
+import { signOut } from 'next-auth/react'
 import { Link } from '../Link'
 
 import { Container } from './styles'
