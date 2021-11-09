@@ -3,7 +3,7 @@ import {
   GetServerSideProps,
   GetServerSidePropsContext
 } from 'next'
-import { getSession } from 'next-auth/client'
+import { getSession } from 'next-auth/react'
 
 interface User {
   email?: string
