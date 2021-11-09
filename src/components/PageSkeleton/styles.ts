@@ -15,4 +15,5 @@ export const Main = styled.main`
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  background-color: #fbfcfd;
 `

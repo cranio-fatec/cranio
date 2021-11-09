@@ -9,7 +9,9 @@ const Footer: React.FC = () => {
       <Content>
         <LeftWrapper>
           <Link href="/">
-            <img src="cranio.png" alt="Crânio Logo" />
+            <a>
+              <img src="/cranio.png" alt="Crânio Logo" />
+            </a>
           </Link>
           <Link href="/">Conheça o projeto</Link>
           <Link href="/">Sobre os autores</Link>

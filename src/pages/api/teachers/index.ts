@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import CustomUser from '../../../@types/User'
 import { fauna } from '../../../services/fauna'
 
-export default async function subjects(
+export default async function teachersRoute(
   req: NextApiRequest,
   res: NextApiResponse
 ) {

@@ -82,13 +82,12 @@ const Signup: React.FC<SignupProps> = ({ googleData, subjects }) => {
           image: googleData?.image,
           ...formData
         })
-
-        const user = response.data.data
+        const user = response.data
 
         const signResponse = await signIn('credentials', {
           email: user.email,
-          password
-          // redirect: false
+          password,
+          redirect: false
         })
 
         if (signResponse.error) {
@@ -96,7 +95,7 @@ const Signup: React.FC<SignupProps> = ({ googleData, subjects }) => {
           return
         }
 
-        push('/profile')
+        push('/dashboard')
         destroyCookie(undefined, 'cranio.pendentGoogleSignupData')
       } catch (err) {
         console.log(err)

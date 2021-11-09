@@ -38,7 +38,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onRequestClose }) => {
         return
       }
 
-      push('/profile')
+      push('/dashboard')
     },
     [push]
   )

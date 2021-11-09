@@ -2,8 +2,9 @@ import { FiEye, FiEyeOff, FiLock } from 'react-icons/fi'
 import styled, { css } from 'styled-components'
 
 import theme from '../../styles/theme'
+import { MaxLengthTooltipProps } from '../Input/types'
 
-import { BaseInputProps, MaxLengthTooltipProps } from './types'
+import { BaseInputProps } from './types'
 
 const variantThemeColor = theme.colors.text
 const variantThemeColorHighlight = '#ffffff'
@@ -16,6 +17,7 @@ const outlined = css`
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
+  ${({ width }) => (width ? `width: ${width}` : 'width: 100%')};
 `
 
 export const InputContainer = styled.div.attrs(
@@ -24,16 +26,14 @@ export const InputContainer = styled.div.attrs(
   color: ${variantThemeColor};
   background-color: ${variantThemeColorHighlight};
   border: 1px solid ${({ theme }) => theme.colors.grey_4};
-  width: fit-content;
-  height: 44px;
+  border-radius: 4px;
+  ${({ height }) => (height ? `height: ${height}` : 'height: 83px')};
   box-sizing: border-box;
-  width: 100%;
+  ${({ width }) => (width ? `width: ${width}` : 'width: 100%')};
   display: flex;
   align-items: center;
   overflow: hidden;
   position: relative;
-
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.24);
   ${props => props.outlined && outlined};
   ${({ isFocused, theme }) =>
     isFocused &&
@@ -41,7 +41,7 @@ export const InputContainer = styled.div.attrs(
   box-shadow: 0 0 0 1px ${theme.colors.blue_0} !important} ;`}
   ${({ maxWidth }) => `max-width: ${maxWidth};`}
   ${({ theme, isErrored }) =>
-    isErrored && `border-color: ${theme.colors.red} !important;`};
+    isErrored && `border-color: ${theme.colors.danger_0} !important;`};
 
   transition: border-color 200ms, box-shadow 200ms;
   background-color: ${({ disabled, theme }) =>
@@ -50,42 +50,61 @@ export const InputContainer = styled.div.attrs(
     disabled &&
     css`
       cursor: not-allowed;
-      input {
+      textarea {
         cursor: not-allowed;
       }
     `}
 
   &:hover {
-    border: 1px solid ${({ theme }) => theme.colors.blue_0};
+    border: 1px solid ${variantThemeColor};
   }
 
-  input {
+  textarea {
     color: ${props => props.theme.colors.text};
     width: 100%;
     height: 100%;
     font-size: 14px;
     line-height: 17px;
     padding: 0;
+    padding: 15px 20px;
     padding-left: 1em;
     outline: none;
     border: none;
     flex: 1;
+    border-style: none;
+    border-color: transparent;
+    overflow: auto;
+    resize: none;
     background-color: transparent;
+    font-family: 'Roboto';
     &::placeholder {
-      color: #cccccc;
-      /* opacity: 0.6; */
+      color: ${props => props.theme.colors.text};
+      opacity: 0.6;
+    }
+
+    &::-webkit-scrollbar {
+      width: 7px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: ${({ theme }) => theme.colors.grey_5};
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: ${({ theme }) => theme.colors.grey_3};
+      border-radius: 20px;
     }
   }
 `
 
-export const InputText = styled.input<BaseInputProps>`
+export const InputText = styled.textarea<BaseInputProps>`
   color: ${props => props.theme.colors.text};
   width: 100%;
   height: 100%;
   font-size: 14px;
   line-height: 17px;
   padding: 0;
-  padding-left: 1em;
+  /* padding-left: 1em; */
   outline: none;
   border: none;
   background-color: transparent;
@@ -99,14 +118,14 @@ export const InputText = styled.input<BaseInputProps>`
 export const IconBox = styled.div`
   color: inherit;
   width: 50px;
-  height: 100%;
+  height: 50px;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: transparent;
   position: relative;
-  user-select: none;
+  align-self: flex-start;
 
   svg {
     width: 20px;
@@ -130,7 +149,7 @@ export const Visible = styled(FiEye)`
   min-height: 24px;
   transform: translateY(-1px);
   position: absolute;
-  color: ${props => props.theme.colors.text};
+  color: ${props => props.theme.colors.grey_4};
 `
 export const Hidden = styled(FiEyeOff)`
   position: absolute;
@@ -139,7 +158,7 @@ export const Hidden = styled(FiEyeOff)`
   min-width: 27px;
   min-height: 24px;
   transform: translateY(-1px);
-  color: ${props => props.theme.colors.text};
+  color: ${props => props.theme.colors.grey_4};
 `
 
 export const MaxLengthTooltip = styled.span<MaxLengthTooltipProps>`
@@ -154,6 +173,7 @@ export const MaxLengthTooltip = styled.span<MaxLengthTooltipProps>`
   align-items: center;
   letter-spacing: 0.4px;
   right: 30px;
+  bottom: 20px;
 
   color: ${({ theme, isAbove }) => (isAbove ? theme.colors.red : '#9c9c9c')};
 `

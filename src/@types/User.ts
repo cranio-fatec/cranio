@@ -15,3 +15,7 @@ export default interface CustomUser {
   isGoogle?: boolean
   graduations?: Graduation[]
 }
+
+export interface UserWithAnswers extends CustomUser {
+  answers: number
+}

@@ -25,6 +25,7 @@ export interface BaseInputPropsClean {
   onChange?: (inputEvent: React.ChangeEvent<HTMLInputElement>) => void
   name?: string
   width?: string
+  height?: string
   maxWidth?: string
   id?: string
   defaultValue?: string
@@ -37,7 +38,4 @@ export interface BaseInputPropsClean {
   maxLength?: number
 
   ref?: any
-}
-export interface MaxLengthTooltipProps {
-  isAbove?: boolean
 }

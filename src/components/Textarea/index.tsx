@@ -1,7 +1,6 @@
 import React, { forwardRef, useCallback, useEffect, useState } from 'react'
-import Cleave from 'cleave.js/react'
-import 'cleave.js/dist/addons/cleave-phone.br'
 import Label from '../Label'
+import { MaxLengthTooltip } from '../Input/styles'
 import { BaseInputProps } from './types'
 import * as Styled from './styles'
 
@@ -29,7 +28,7 @@ export const maskDict = {
   }
 }
 
-const Input = (
+const Textarea = (
   {
     label,
     leftIcon: LeftIcon,
@@ -56,7 +55,6 @@ const Input = (
   const [showPassword, setShowPassword] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
   const [isFilled, setIsFilled] = useState(!!value || !!defaultValue)
-  const [cleaveInstance, setCleaveIntance] = useState(null)
   const [internalValue, setInternalValue] = useState(
     value ?? defaultValue ?? ''
   )
@@ -75,7 +73,7 @@ const Input = (
 
   const handleInputBlur = useCallback(() => {
     setIsFocused(false)
-    const inputRef = ref as React.MutableRefObject<HTMLInputElement>
+    const inputRef = ref as React.MutableRefObject<HTMLTextAreaElement>
     setIsFilled(!!inputRef?.current?.value)
   }, [ref])
 
@@ -87,11 +85,8 @@ const Input = (
     [onChange]
   )
 
-  const option =
-    mask && maskDict[mask === 'phone' && isCellphone ? 'cellphone' : mask]
-
   return (
-    <Styled.Container className="input-container">
+    <Styled.Container>
       {!!label && <Label required={labelRequired}>{label}</Label>}
       <Styled.InputContainer
         isErrored={isErrored}
@@ -105,61 +100,20 @@ const Input = (
             <LeftIcon />
           </Styled.IconBox>
         )}
-        {mask ? (
-          <Cleave
-            name={name}
-            placeholder={placeholder}
-            type={!showPassword ? type : 'text'}
-            value={value}
-            onChange={handleOnChange}
-            htmlRef={r => ref && (ref.current = r)}
-            id={id}
-            defaultValue={defaultValue}
-            onFocus={handleInputFocus}
-            onBlur={handleInputBlur}
-            required={required}
-            disabled={disabled}
-            options={option}
-            onInit={(aa: any) => setCleaveIntance(aa)}
-            onKeyDown={e => {
-              mask === 'phone' &&
-                setIsCellphone(oldValue => {
-                  if (
-                    ((e.target as any).rawValue.charAt(2) === '9') !==
-                    oldValue
-                  ) {
-                    console.log('mudei')
-                    cleaveInstance.properties = {
-                      ...cleaveInstance.properties,
-                      ...maskDict[
-                        mask === 'phone' && !oldValue ? 'cellphone' : mask
-                      ],
-                      maxLength: !oldValue ? 11 : 10
-                    }
-                    console.log(cleaveInstance.properties)
-                    console.log(cleaveInstance.maxLength)
-                    return !oldValue
-                  }
-                  return oldValue
-                })
-            }}
-          />
-        ) : (
-          <input
-            name={name}
-            placeholder={placeholder}
-            type={!showPassword ? type : 'text'}
-            value={value}
-            onChange={handleOnChange}
-            ref={ref}
-            id={id}
-            defaultValue={defaultValue}
-            onFocus={handleInputFocus}
-            onBlur={handleInputBlur}
-            required={required}
-            disabled={disabled}
-          />
-        )}
+        <textarea
+          name={name}
+          placeholder={placeholder}
+          // type="text"
+          value={value}
+          onChange={handleOnChange}
+          ref={ref}
+          id={id}
+          defaultValue={defaultValue}
+          onFocus={handleInputFocus}
+          onBlur={handleInputBlur}
+          required={required}
+          disabled={disabled}
+        />
         {RightIcon ? (
           <Styled.IconBox onClick={onClickIcon}>
             <RightIcon />
@@ -183,4 +137,4 @@ const Input = (
   )
 }
 
-export default forwardRef(Input)
+export default forwardRef(Textarea)

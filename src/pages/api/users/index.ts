@@ -1,7 +1,9 @@
 import { hash } from 'bcryptjs'
 import { query as q } from 'faunadb'
 import { NextApiRequest, NextApiResponse } from 'next'
+import { FaunaDocument } from '../../../@types/faunadb'
 import { fauna } from '../../../services/fauna'
+import { parseFaunaDoc } from '../../../styles/utils/parseFaunaDoc'
 
 interface UserDTO {
   username: string
@@ -45,7 +47,7 @@ export async function createUser(data: UserDTO): Promise<Record<string, any>> {
     data.isGoogle = true
   }
 
-  return fauna.query(
+  const response = await fauna.query<FaunaDocument>(
     q.If(
       q.Not(
         q.Exists(q.Match(q.Index('user_by_email'), q.Casefold(data.email)))
@@ -54,4 +56,6 @@ export async function createUser(data: UserDTO): Promise<Record<string, any>> {
       q.Abort('This e-mail already exists.')
     )
   )
+
+  return parseFaunaDoc(response)
 }

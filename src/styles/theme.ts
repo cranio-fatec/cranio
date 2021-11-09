@@ -39,7 +39,55 @@ const theme = {
 
     info__2: '#E3F6FB',
     info_0: '#1DB9E0',
-    info_1: '#1588A4'
+    info_1: '#1588A4',
+
+    subjects: {
+      // Matemática
+      '314409678011368015': {
+        text: '#2196F3',
+        background: '#E3F2FD'
+      },
+      // Português
+      '314409678677213775': {
+        text: '#EB5757',
+        background: '#FFBBBB'
+      },
+      // História
+      '314409679299019343': {
+        text: '#D96C45',
+        background: '#FFD2A8'
+      },
+      // Geografia
+      '314409679899853391': {
+        text: '#FF00EE',
+        background: '#FFB3FA'
+      },
+      // Biologia
+      '314409680511173199': {
+        text: '#00750A',
+        background: '#BDFFC2'
+      },
+      // Química
+      '314409681244127823': {
+        text: '#008775',
+        background: '#8FFFF0'
+      },
+      // Filosofia
+      '314409681830281807': {
+        text: '#000000',
+        background: '#F0F0F0'
+      },
+      // Sociologia
+      '314409682413290063': {
+        text: '#FFFFFF',
+        background: '#000000'
+      },
+      // Física
+      '314409683505906255': {
+        text: '#949100',
+        background: '#FFFEC4'
+      }
+    }
   },
   sizes: {
     container: '1220px'

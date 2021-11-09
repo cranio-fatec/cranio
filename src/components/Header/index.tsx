@@ -1,6 +1,7 @@
 import { useSession } from 'next-auth/react'
 import Head from 'next/head'
-import React, { useRef, useState } from 'react'
+import { useRouter } from 'next/router'
+import React, { useCallback, useRef, useState } from 'react'
 import { MdSearch } from 'react-icons/md'
 import useOutsideClick from '../../hooks/useOutsideClick'
 import Button from '../Button'
@@ -8,6 +9,7 @@ import Input from '../Input'
 import { Link } from '../Link'
 import ProfilePopout from '../ProfilePopout'
 import { SignInButton } from '../SignInButton'
+import UserAvatar from '../UserAvatar'
 
 import {
   ButtonsContainer,
@@ -20,23 +22,18 @@ import { HeaderProps } from './types'
 
 const Header: React.FC<HeaderProps> = ({ title }) => {
   const profilePopoutRef = useRef<any>(null)
+  const questionInputRef = useRef<HTMLInputElement>(null)
   const [isProfilePopoutOpen, setIsProfilePopoutOpen] = useState(false)
   const { data: session } = useSession()
   console.log('Sessão', session)
+  const router = useRouter()
 
-  const nameArr = session
-    ? (session.user as any).username.split('/')[0].split(' ')
-    : []
+  const nameArr = session ? session.user.username.split('/')[0].split(' ') : []
   // const nameArr = ['teste', 'a']
   const fullName = session
     ? nameArr.length > 1
       ? `${nameArr[0]} ${nameArr[1]}`
       : `${nameArr[0]}`
-    : ''
-  const acronym = session
-    ? nameArr.length > 1
-      ? `${nameArr[0][0]}${nameArr[1][0]}`.toUpperCase()
-      : `${nameArr[0][0]}${nameArr[0][1]}`.toUpperCase()
     : ''
 
   useOutsideClick(profilePopoutRef, () => {
@@ -45,13 +42,29 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
     }
   })
 
+  const handleAsk = useCallback(
+    async (e?: React.FormEvent) => {
+      e?.preventDefault()
+      router.push(
+        `/posts/new?question=${questionInputRef.current.value}`,
+        '/posts/new'
+      )
+      questionInputRef.current.value = ''
+    },
+    [router]
+  )
+
   return (
     <Container>
       <Head>
         <title>{title ? `${title} - Crânio` : 'Crânio'}</title>
       </Head>
       <Content>
-        <img src="cranio.png" alt="Crânio" />
+        <Link href="/">
+          <a>
+            <img src="/cranio.png" alt="Crânio Logo" />
+          </a>
+        </Link>
         <nav>
           <ul>
             <li>
@@ -62,13 +75,15 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
             </li>
           </ul>
         </nav>
-        <form>
+        <form onSubmit={handleAsk}>
           <Input
             type="text"
             name="search"
             id="search"
             placeholder="Faça uma pergunta..."
             rightIcon={MdSearch}
+            ref={questionInputRef}
+            onClickIcon={() => handleAsk()}
           />
         </form>
         {session ? (
@@ -76,13 +91,7 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
             <UserDataContent onClick={() => setIsProfilePopoutOpen(true)}>
               <strong>{fullName}</strong>
 
-              <div className="icon-container">
-                {session.user.image ? (
-                  <img src={session.user.image} alt={session.user.username} />
-                ) : (
-                  acronym
-                )}
-              </div>
+              <UserAvatar user={session.user} />
             </UserDataContent>
             <ProfilePopout
               isOpen={isProfilePopoutOpen}
