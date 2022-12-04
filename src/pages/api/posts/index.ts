@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 
 import { prisma } from '../../../lib/prismadb'
+import { revalidatePostRelated } from '../../../utils/revalidatePostRelated'
 
 interface CreatePostDTO {
 	title: string
@@ -26,8 +27,7 @@ export default async function postRoute(
 	} else if (req.method === 'POST') {
 		try {
 			const post = await createPost(req.body)
-			await res.revalidate(`/posts/${post.id}`)
-			await res.revalidate(`/dashboard`)
+			await revalidatePostRelated(res, post.id)
 
 			return res.status(200).json(post)
 		} catch (err: any) {

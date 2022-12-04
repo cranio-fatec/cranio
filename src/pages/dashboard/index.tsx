@@ -7,14 +7,11 @@ import { NextSeo } from 'next-seo'
 
 import { Link } from '../../components/Link'
 import PostTable from '../../components/PostTable'
-import UserAvatar from '../../components/UserAvatar'
 import {
 	ButtonsWrapper,
 	Container,
 	Content,
-	CrownBox,
-	SubjectItem,
-	TopTeachers
+	SubjectItem
 } from '../../styles/pages/Dashboard'
 import { getPosts } from '../api/posts'
 import { getSubjects } from '../api/subjects'
@@ -22,10 +19,10 @@ import {
 	getTeacherLeaderboard,
 	UserWithAnswers
 } from '../api/teachers/leaderboard'
-import CrownIcon from '../../assets/crown.svg'
 import { PostWithAuthorSubjectAnswers } from '../../components/PostTable/types'
 import { DEFAULT_OPTIONS } from '../../config/swr'
 import { useAuth } from '../../hooks/auth'
+import TeacherRanking from '../../components/TeacherRanking'
 
 interface DashboardProps {
 	subjects: Subject[]
@@ -92,22 +89,7 @@ const Dashboard: React.FC<DashboardProps> = ({
 						</div>
 					)}
 				</Content>
-				{!!leaderboard.length && (
-					<TopTeachers>
-						<h3>Professores mais participativos no mês</h3>
-						<ol>
-							{leaderboard.map((user) => (
-								<li key={user.id}>
-									<CrownBox>
-										<CrownIcon />
-									</CrownBox>
-									<UserAvatar user={user} />
-									<span>{user.username}</span>
-								</li>
-							))}
-						</ol>
-					</TopTeachers>
-				)}
+				{!!leaderboard.length && <TeacherRanking leaderboard={leaderboard} />}
 			</Container>
 		</>
 	)
