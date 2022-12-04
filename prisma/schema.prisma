@@ -8,36 +8,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Begin NEXT AUTH
-model Account {
-  id                String  @id @default(uuid())
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String? @db.Text
-  session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
-}
-
-model Session {
-  id           String   @id @default(uuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-// End NEXT AUTH
-
 model User {
   id                String           @id @default(uuid())
   email             String           @unique
@@ -51,17 +21,17 @@ model User {
   posts             Post[]
   answers           Answer[]
   reactions         Reaction[]
-
-  // Begin NEXT AUTH
-  image         String?
-  emailVerified DateTime?
-  name          String?
-  accounts      Account[]
-  sessions      Session[]
-  // End NEXT AUTH
+  type              UserType?
+  image             String?
+  name              String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+}
+
+enum UserType {
+  TEACHER
+  STUDENT
 }
 
 model Subject {
@@ -76,9 +46,9 @@ model UserGraduation {
   id        String          @id @default(uuid())
   area      String
   level     GraduationLevel
-  user      User            @relation(fields: [userId], references: [id])
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
-  subject   Subject         @relation(fields: [subjectId], references: [id])
+  subject   Subject         @relation(fields: [subjectId], references: [id], onDelete: Cascade)
   subjectId String
 }
 
@@ -98,9 +68,9 @@ model Post {
   title  String
   closed Boolean @default(false)
 
-  subject   Subject @relation(fields: [subjectId], references: [id])
+  subject   Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
   subjectId String
-  author    User    @relation(fields: [authorId], references: [id])
+  author    User    @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId  String
 
   answers   Answer[]
@@ -114,10 +84,10 @@ model Answer {
   id   String @id @default(uuid())
   body String
 
-  post   Post   @relation(fields: [postId], references: [id])
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId String
 
-  author   User   @relation(fields: [authorId], references: [id])
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId String
 
   reactions Reaction[]
@@ -131,13 +101,13 @@ model Reaction {
 
   value Int
 
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 
-  post   Post?   @relation(fields: [postId], references: [id])
+  post   Post?   @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId String?
 
-  answer   Answer? @relation(fields: [answerId], references: [id])
+  answer   Answer? @relation(fields: [answerId], references: [id], onDelete: Cascade)
   answerId String?
 
   createdAt DateTime @default(now())

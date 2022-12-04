@@ -15,13 +15,14 @@ import TeacherSignupForm from '../../components/TeacherSignupForm'
 import { getSubjects } from '../api/subjects'
 import Button from '../../components/Button'
 import { api } from '../../services/api'
+import { useAuth } from '../../hooks/auth'
 
 interface SignupProps {
 	googleData?: {
 		email: string
 		name: string
 		image: string
-	}
+	} | null
 	subjects?: Subject[]
 }
 
@@ -43,6 +44,8 @@ const Signup: React.FC<SignupProps> = ({ googleData, subjects }) => {
 			/>
 		)
 	}
+
+	const { mutate } = useAuth()
 
 	const [currentForm, setCurrentForm] =
 		useState<keyof typeof formMaps>('student')
@@ -91,6 +94,8 @@ const Signup: React.FC<SignupProps> = ({ googleData, subjects }) => {
 					return
 				}
 
+				mutate()
+
 				push('/dashboard')
 				destroyCookie(undefined, 'cranio.pendentGoogleSignupData')
 			} catch (err) {
@@ -106,6 +111,7 @@ const Signup: React.FC<SignupProps> = ({ googleData, subjects }) => {
 			email,
 			formData,
 			googleData?.image,
+			mutate,
 			password,
 			push,
 			username

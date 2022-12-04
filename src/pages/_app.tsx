@@ -14,6 +14,7 @@ import * as S from '../styles/Main'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { api } from '../services/api'
+import AppProvider from '../hooks'
 
 Modal.setAppElement('#__next')
 
@@ -39,28 +40,30 @@ const MyApp: React.FC<AppProps> = ({
 				value={{ fetcher: (url) => api.get(url).then((res) => res.data) }}
 			>
 				<SessionProvider session={session}>
-					<S.Container>
-						<Header />
-						<S.Main>
-							<DefaultSeo
-								title="Crânio"
-								description="Crânio é um fórum para alunos e professores se comunicarem na melhor maneira."
-								openGraph={{
-									type: 'website',
-									locale: 'pt_BR',
-									url: 'https://cranio.vercel.app/',
-									siteName: 'Crânio'
-								}}
-								// twitter={{
-								// 	handle: '@handle',
-								// 	site: '@site',
-								// 	cardType: 'summary_large_image'
-								// }}
-							/>
-							<Component {...pageProps} />
-						</S.Main>
-						<Footer />
-					</S.Container>
+					<AppProvider>
+						<S.Container>
+							<Header />
+							<S.Main>
+								<DefaultSeo
+									title="Crânio"
+									description="Crânio é um fórum para alunos e professores se comunicarem na melhor maneira."
+									openGraph={{
+										type: 'website',
+										locale: 'pt_BR',
+										url: 'https://cranio.vercel.app/',
+										siteName: 'Crânio'
+									}}
+									// twitter={{
+									// 	handle: '@handle',
+									// 	site: '@site',
+									// 	cardType: 'summary_large_image'
+									// }}
+								/>
+								<Component {...pageProps} />
+							</S.Main>
+							<Footer />
+						</S.Container>
+					</AppProvider>
 				</SessionProvider>
 			</SWRConfig>
 			<GlobalStyle />

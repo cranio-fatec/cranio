@@ -56,17 +56,21 @@ export async function createUser(data: UserDTO): Promise<Record<string, any>> {
 	}
 
 	const { graduations, ...restData } = data
+	const userType = graduations?.length ? 'TEACHER' : 'STUDENT'
 
-	const user = await prisma.user.create({
-		data: {
-			...restData,
+	const finalData = {
+		...restData,
+		type: userType,
 
-			graduations: {
-				createMany: {
-					data: graduations ?? []
-				}
+		graduations: {
+			createMany: {
+				data: graduations ?? []
 			}
 		}
+	} as const
+
+	const user = await prisma.user.create({
+		data: finalData
 	})
 
 	return user

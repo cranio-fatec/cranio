@@ -1,10 +1,27 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { getSession } from 'next-auth/react'
+import { unstable_getServerSession } from 'next-auth'
 
-const handler = (req: NextApiRequest, res: NextApiResponse) => {
-	const session = getSession({ req })
+import { prisma } from '../../lib/prismadb'
+import { getAuthOptions } from './auth/[...nextauth]'
 
-	res.json({ session })
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+	const session = await unstable_getServerSession(req, res, getAuthOptions(res))
+
+	if (!session) {
+		return res.status(401).end()
+	}
+
+	const user = await prisma.user.findFirst({
+		where: {
+			email: session.user.email
+		},
+		include: {
+			// favoriteSubject: true,
+			graduations: true
+		}
+	})
+
+	res.json(user)
 }
 
 export default handler

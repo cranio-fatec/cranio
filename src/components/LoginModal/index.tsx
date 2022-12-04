@@ -11,6 +11,7 @@ import Input from '../Input'
 import { GoogleOAuthButton } from '../GoogleOAuthButton'
 import theme from '../../styles/theme'
 import * as S from './styles'
+import { useAuth } from '../../hooks/auth'
 
 interface LoginModalProps {
 	isOpen: boolean
@@ -21,6 +22,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onRequestClose }) => {
 	const emailInputRef = useRef<HTMLInputElement | null>(null)
 	const passwordInputRef = useRef<HTMLInputElement | null>(null)
 	const { push } = useRouter()
+	const { mutate } = useAuth()
 
 	const handleSubmit = useCallback(
 		async (e: React.FormEvent) => {
@@ -32,17 +34,17 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onRequestClose }) => {
 			}
 			const response = await signIn('credentials', data)
 
-			console.log({ response })
-
 			if (response?.error) {
 				console.log(response)
 				alert(response.error)
 				return
 			}
 
+			mutate()
+			onRequestClose()
 			push('/dashboard')
 		},
-		[push]
+		[mutate, onRequestClose, push]
 	)
 
 	return (

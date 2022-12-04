@@ -1,9 +1,9 @@
-import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { MdSearch } from 'react-icons/md'
 
+import { useAuth } from '../../hooks/auth'
 import useOutsideClick from '../../hooks/useOutsideClick'
 import Button from '../Button'
 import Input from '../Input'
@@ -23,21 +23,36 @@ const Header = () => {
 	const profilePopoutRef = useRef<any>(null)
 	const questionInputRef = useRef<HTMLInputElement>(null)
 	const [isProfilePopoutOpen, setIsProfilePopoutOpen] = useState(false)
-	const { data: session } = useSession()
+	const { user } = useAuth()
 	const router = useRouter()
-	console.log('aaa', { session })
 
-	const nameArr = session
-		? (session.user.username ?? session.user.name ?? '')
-				.split('/')[0]
-				.split(' ')
-		: []
-	// const nameArr = ['teste', 'a']
-	const fullName = session
-		? nameArr.length > 1
-			? `${nameArr[0]} ${nameArr[1]}`
-			: `${nameArr[0]}`
-		: ''
+	// useEffect(() => {
+	// 	if (
+	// 		session &&
+	// 		!session.user.type &&
+	// 		!window?.location.pathname.includes('signup')
+	// 	) {
+	// 		// sessionStorage?.setItem('@Cranio:redirecting', 'true')
+	// 		router.push('/signup').then(() => {
+	// 			// setInterval(
+	// 			// 	() => sessionStorage?.removeItem('@Cranio:redirecting'),
+	// 			// 	2000
+	// 			// )
+	// 		})
+	// 	}
+	// }, [session, router])
+
+	const fullName = useMemo(() => {
+		const nameArr = user
+			? (user.username ?? user.name ?? '').split('/')[0].split(' ')
+			: []
+
+		return user
+			? nameArr.length > 1
+				? `${nameArr[0]} ${nameArr[1]}`
+				: `${nameArr[0]}`
+			: ''
+	}, [user])
 
 	useOutsideClick(profilePopoutRef, () => {
 		if (isProfilePopoutOpen) {
@@ -90,14 +105,14 @@ const Header = () => {
 						onClickIcon={() => handleAsk()}
 					/>
 				</form>
-				{session ? (
+				{user ? (
 					<UserDataContainer ref={profilePopoutRef}>
 						<UserDataContent
 							onClick={() => setIsProfilePopoutOpen((old) => !old)}
 						>
 							<strong>{fullName}</strong>
 
-							<UserAvatar user={session.user} />
+							<UserAvatar user={user} />
 						</UserDataContent>
 						<ProfilePopout isOpen={isProfilePopoutOpen} />
 					</UserDataContainer>
