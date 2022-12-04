@@ -1,5 +1,6 @@
 import { GraduationLevel, UserGraduation } from '@prisma/client'
 import React, { useState, useRef, useCallback } from 'react'
+import { toast } from 'react-hot-toast'
 import { MdClose, MdContactMail, MdExtension, MdMenuBook } from 'react-icons/md'
 
 import Input from '../Input'
@@ -53,7 +54,7 @@ const TeacherSignupForm: React.FC<SignupFormProps> = ({
 		}
 
 		if (error) {
-			alert('Please fill all the fields.')
+			toast.error('Preencha todos os campos!')
 			return
 		}
 

@@ -4,6 +4,7 @@ import React, { useCallback, useRef } from 'react'
 import { MdEdit } from 'react-icons/md'
 import useSWR from 'swr'
 import { NextSeo } from 'next-seo'
+import { toast } from 'react-hot-toast'
 
 import { getPostById } from '../api/posts/[id]'
 import { Container } from '../../styles/pages/Post'
@@ -44,7 +45,10 @@ const Post: React.FC<PostPageProps> = ({ post }) => {
 			}
 
 			if ((bodyInputRef.current?.value.length ?? 9999) > bodyMaxLength) {
-				alert("Please respect answer's body length.")
+				toast.error(
+					`Por favor limite o corpo da resposta em ${bodyMaxLength} caracteres!`
+				)
+				// alert("Please respect answer's body length.")
 				return
 			}
 

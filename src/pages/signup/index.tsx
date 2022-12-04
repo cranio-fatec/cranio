@@ -7,6 +7,7 @@ import { MdLock, MdMail } from 'react-icons/md'
 import nookies, { destroyCookie } from 'nookies'
 import { Subject } from '@prisma/client'
 import { isAxiosError } from 'axios'
+import { toast } from 'react-hot-toast'
 
 import Input from '../../components/Input'
 import { Container } from '../../styles/pages/Signup'
@@ -61,7 +62,8 @@ const Signup: React.FC<SignupProps> = ({ googleData, subjects }) => {
 			e.preventDefault()
 
 			if (password !== confirmPassword) {
-				alert('Passwords do not match.')
+				toast.error('As senhas não batem.')
+				// alert('Passwords do not match.')
 				return
 			}
 
@@ -69,7 +71,8 @@ const Signup: React.FC<SignupProps> = ({ googleData, subjects }) => {
 				(currentForm === 'teacher' && !formData.graduations) ||
 				formData?.graduations?.length === 0
 			) {
-				alert('Please add at least one graduation.')
+				toast.error(`Por favor, adicione pelo menos uma graduação abaixo!`)
+				// alert('Please add at least one graduation.')
 				return
 			}
 
@@ -90,7 +93,7 @@ const Signup: React.FC<SignupProps> = ({ googleData, subjects }) => {
 				})
 
 				if (signResponse?.error) {
-					alert(signResponse.error)
+					toast.error(signResponse.error)
 					return
 				}
 
@@ -101,7 +104,8 @@ const Signup: React.FC<SignupProps> = ({ googleData, subjects }) => {
 			} catch (err) {
 				console.log(err)
 				if (isAxiosError(err)) {
-					alert(err.response?.data.error)
+					// alert(err.response?.data.error)
+					toast.error(err.response?.data.error)
 				}
 			}
 		},

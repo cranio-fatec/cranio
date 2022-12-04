@@ -4,6 +4,7 @@ import { signIn } from 'next-auth/react'
 import { FiX } from 'react-icons/fi'
 import { useRouter } from 'next/router'
 import Image from 'next/image'
+import { toast } from 'react-hot-toast'
 
 import Button from '../Button'
 import { Link } from '../Link'
@@ -36,7 +37,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onRequestClose }) => {
 
 			if (response?.error) {
 				console.log(response)
-				alert(response.error)
+				toast.error(response.error)
 				return
 			}
 

@@ -8,6 +8,7 @@ import { DefaultSeo } from 'next-seo'
 import { SessionProvider } from 'next-auth/react'
 import { SWRConfig } from 'swr'
 import { Roboto, Montserrat } from '@next/font/google'
+import { Toaster } from 'react-hot-toast'
 
 import GlobalStyle from '../styles/global'
 import theme from '../styles/theme'
@@ -78,6 +79,7 @@ const MyApp: React.FC<AppProps> = ({
 								<Component {...pageProps} />
 							</S.Main>
 							<Footer />
+							<Toaster />
 						</S.Container>
 					</AppProvider>
 				</SessionProvider>

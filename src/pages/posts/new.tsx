@@ -3,6 +3,7 @@ import { GetStaticProps } from 'next'
 import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/router'
 import React, { useCallback, useRef, useState } from 'react'
+import { toast } from 'react-hot-toast'
 import { MdEdit, MdExtension, MdFormatColorText } from 'react-icons/md'
 
 import { Button } from '../../components/Button/styles'
@@ -41,7 +42,8 @@ const NewPost: React.FC<NewPostProps> = ({ subjects }) => {
 			}
 
 			if (!subject) {
-				alert('Please fill all fields.')
+				toast.error(`Preencha todos os campos!`)
+				// alert('Please fill all fields.')
 				setIsSubjectErrored(true)
 				return
 			}
@@ -55,7 +57,7 @@ const NewPost: React.FC<NewPostProps> = ({ subjects }) => {
 			}
 
 			if (error) {
-				alert("Please respect post's title and body length.")
+				toast.error(`Por favor atente-se ao limite de caracteres dos campos!`)
 				return
 			}
 
