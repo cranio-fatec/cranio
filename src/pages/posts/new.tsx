@@ -1,5 +1,6 @@
 import { Subject } from '@prisma/client'
 import { GetStaticProps } from 'next'
+import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/router'
 import React, { useCallback, useRef, useState } from 'react'
 import { MdEdit, MdExtension, MdFormatColorText } from 'react-icons/md'
@@ -74,56 +75,59 @@ const NewPost: React.FC<NewPostProps> = ({ subjects }) => {
 	)
 
 	return (
-		<Container>
-			<h1>Criar Postagem</h1>
-			<form onSubmit={handleSubmit}>
-				<Input
-					type="text"
-					defaultValue={(router.query.question as string) ?? ''}
-					label="Título"
-					labelRequired
-					placeholder="Digite o título da postagem"
-					leftIcon={MdFormatColorText}
-					maxLength={titleMaxLength}
-					ref={titleInputRef}
-				/>
-				<Select
-					options={subjects.map((option) => ({
-						value: option.id,
-						label: option.name
-					}))}
-					labelRequired
-					label="Matéria"
-					placeholder="Selecione a matéria relacinada com a postagem"
-					maxMenuHeight={170}
-					leftIcon={MdExtension}
-					value={subject}
-					margin="0 0 16px 0"
-					onChange={(option: any) => {
-						setIsSubjectErrored(false)
-						setSubject(option)
-					}}
-					isErrored={isSubjectErrored}
-				/>
-				<Textarea
-					label="Corpo"
-					labelRequired
-					placeholder="Corpo da postagem"
-					leftIcon={MdEdit}
-					maxLength={bodyMaxLength}
-					height="256px"
-					ref={bodyInputRef}
-				/>
-				<Button
-					type="submit"
-					schema="darkblue"
-					margin="24px 0 0 0"
-					width="800px"
-				>
-					Publicar
-				</Button>
-			</form>
-		</Container>
+		<>
+			<NextSeo title="Nova Postagem" noindex nofollow />
+			<Container>
+				<h1>Criar Postagem</h1>
+				<form onSubmit={handleSubmit}>
+					<Input
+						type="text"
+						defaultValue={(router.query.question as string) ?? ''}
+						label="Título"
+						labelRequired
+						placeholder="Digite o título da postagem"
+						leftIcon={MdFormatColorText}
+						maxLength={titleMaxLength}
+						ref={titleInputRef}
+					/>
+					<Select
+						options={subjects.map((option) => ({
+							value: option.id,
+							label: option.name
+						}))}
+						labelRequired
+						label="Matéria"
+						placeholder="Selecione a matéria relacinada com a postagem"
+						maxMenuHeight={170}
+						leftIcon={MdExtension}
+						value={subject}
+						margin="0 0 16px 0"
+						onChange={(option: any) => {
+							setIsSubjectErrored(false)
+							setSubject(option)
+						}}
+						isErrored={isSubjectErrored}
+					/>
+					<Textarea
+						label="Corpo"
+						labelRequired
+						placeholder="Corpo da postagem"
+						leftIcon={MdEdit}
+						maxLength={bodyMaxLength}
+						height="256px"
+						ref={bodyInputRef}
+					/>
+					<Button
+						type="submit"
+						schema="darkblue"
+						margin="24px 0 0 0"
+						width="800px"
+					>
+						Publicar
+					</Button>
+				</form>
+			</Container>
+		</>
 	)
 }
 

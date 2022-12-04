@@ -7,6 +7,7 @@ import Router from 'next/router'
 import { DefaultSeo } from 'next-seo'
 import { SessionProvider } from 'next-auth/react'
 import { SWRConfig } from 'swr'
+import { Roboto, Montserrat } from '@next/font/google'
 
 import GlobalStyle from '../styles/global'
 import theme from '../styles/theme'
@@ -30,12 +31,26 @@ Router.events.on('routeChangeError', () => {
 	NProgress.done()
 })
 
+const roboto = Roboto({
+	subsets: ['latin'],
+	weight: ['400', '500', '700', '900']
+})
+const montserrat = Montserrat({ subsets: ['latin'] })
+
 const MyApp: React.FC<AppProps> = ({
 	Component,
 	pageProps: { session, ...pageProps }
 }) => {
 	return (
-		<ThemeProvider theme={theme}>
+		<ThemeProvider
+			theme={{
+				...theme,
+				fonts: {
+					primary: roboto.style.fontFamily,
+					secondary: montserrat.style.fontFamily
+				}
+			}}
+		>
 			<SWRConfig
 				value={{ fetcher: (url) => api.get(url).then((res) => res.data) }}
 			>
@@ -45,7 +60,8 @@ const MyApp: React.FC<AppProps> = ({
 							<Header />
 							<S.Main>
 								<DefaultSeo
-									title="Crânio"
+									titleTemplate="%s | Crânio"
+									defaultTitle="Crânio"
 									description="Crânio é um fórum para alunos e professores se comunicarem na melhor maneira."
 									openGraph={{
 										type: 'website',

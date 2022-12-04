@@ -92,6 +92,6 @@ const theme = {
 	sizes: {
 		container: '1220px'
 	}
-}
+} as const
 
 export default theme

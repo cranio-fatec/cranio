@@ -9,7 +9,7 @@ export const Container = styled.article`
 	padding: 100px 0;
 
 	h1 {
-		font-family: Montserrat;
+		font-family: ${({ theme }) => theme.fonts.secondary};
 		font-style: normal;
 		font-weight: bold;
 		font-size: 24px;

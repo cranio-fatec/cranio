@@ -48,7 +48,7 @@ export const Container = styled.table`
 			background: #f5f5f5;
 			box-shadow: inset 0px -2px 0px rgba(0, 0, 0, 0.25);
 			border-radius: 0px;
-			font-family: Montserrat;
+			font-family: ${({ theme }) => theme.fonts.secondary};
 			font-style: normal;
 			font-weight: normal;
 			font-size: 14px;
@@ -74,7 +74,7 @@ export const Container = styled.table`
 export const PostStatus = styled.span<PostStatusProps>`
 	width: 100px;
 	height: 24px;
-	font-family: Montserrat;
+	font-family: ${({ theme }) => theme.fonts.secondary};
 	font-style: normal;
 	font-weight: normal;
 	font-size: 12px;

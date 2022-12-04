@@ -143,7 +143,7 @@ export const Hidden = styled(FiEyeOff)`
 
 export const MaxLengthTooltip = styled.span<MaxLengthTooltipProps>`
 	position: absolute;
-	font-family: Montserrat;
+	font-family: ${({ theme }) => theme.fonts.secondary};
 	font-weight: ${({ isAbove }) => (isAbove ? 'bold' : 'normal')};
 	font-size: 12px;
 	line-height: 16px;

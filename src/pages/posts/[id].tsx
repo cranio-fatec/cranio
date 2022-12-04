@@ -3,6 +3,7 @@ import { useSession } from 'next-auth/react'
 import React, { useCallback, useRef } from 'react'
 import { MdEdit } from 'react-icons/md'
 import useSWR from 'swr'
+import { NextSeo } from 'next-seo'
 
 import { getPostById } from '../api/posts/[id]'
 import { Container } from '../../styles/pages/Post'
@@ -62,39 +63,42 @@ const Post: React.FC<PostPageProps> = ({ post }) => {
 	)
 
 	return (
-		<Container>
-			<ol>
-				<PostItem content={post} isOdd />
-				{answers.map((answer, index) => (
-					<PostItem
-						key={answer.id}
-						content={answer}
-						isOdd={Boolean(index % 2)}
-					/>
-				))}
-			</ol>
-			{user && (
-				<form onSubmit={handleAnswer}>
-					<h2>Adicione uma resposta para a discussão</h2>
-					<Textarea
-						required
-						placeholder="Escreva aqui sua resposta"
-						leftIcon={MdEdit}
-						maxLength={bodyMaxLength}
-						height="256px"
-						ref={bodyInputRef}
-					/>
-					<Button
-						type="submit"
-						schema="darkblue"
-						margin="24px 0 0 0"
-						width="800px"
-					>
-						Publicar
-					</Button>
-				</form>
-			)}
-		</Container>
+		<>
+			<NextSeo title={post.title} />
+			<Container>
+				<ol>
+					<PostItem content={post} isOdd />
+					{answers.map((answer, index) => (
+						<PostItem
+							key={answer.id}
+							content={answer}
+							isOdd={Boolean(index % 2)}
+						/>
+					))}
+				</ol>
+				{user && (
+					<form onSubmit={handleAnswer}>
+						<h2>Adicione uma resposta para a discussão</h2>
+						<Textarea
+							required
+							placeholder="Escreva aqui sua resposta"
+							leftIcon={MdEdit}
+							maxLength={bodyMaxLength}
+							height="256px"
+							ref={bodyInputRef}
+						/>
+						<Button
+							type="submit"
+							schema="darkblue"
+							margin="24px 0 0 0"
+							width="800px"
+						>
+							Publicar
+						</Button>
+					</form>
+				)}
+			</Container>
+		</>
 	)
 }
 

@@ -20,7 +20,7 @@ export const Container = styled.div`
 		align-items: center;
 		justify-content: center;
 		h2 {
-			font-family: Montserrat;
+			font-family: ${({ theme }) => theme.fonts.secondary};
 			font-style: normal;
 			font-weight: normal;
 			font-size: 20px;

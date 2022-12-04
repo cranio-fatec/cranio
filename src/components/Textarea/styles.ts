@@ -75,7 +75,7 @@ export const InputContainer = styled.div.attrs(
 		overflow: auto;
 		resize: none;
 		background-color: transparent;
-		font-family: 'Roboto';
+		font-family: ${({ theme }) => theme.fonts.primary};
 		&::placeholder {
 			color: ${(props) => props.theme.colors.text};
 			opacity: 0.6;
@@ -162,7 +162,7 @@ export const Hidden = styled(FiEyeOff)`
 
 export const MaxLengthTooltip = styled.span<MaxLengthTooltipProps>`
 	position: absolute;
-	font-family: Montserrat;
+	font-family: ${({ theme }) => theme.fonts.secondary};
 	font-weight: ${({ isAbove }) => (isAbove ? 'bold' : 'normal')};
 	font-size: 12px;
 	line-height: 16px;
