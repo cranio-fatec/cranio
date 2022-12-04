@@ -10,10 +10,8 @@ const PostItem: React.FC<PostItemProps> = ({ content, isOdd }) => {
 		<Container isOdd={isOdd}>
 			<UserInfo className="user-info">
 				<Link href={`/profile/${content.authorId}`}>
-					<a>
-						<UserAvatar user={content.author} />
-						<span>{content.author.username ?? content.author.name}</span>
-					</a>
+					<UserAvatar user={content.author} />
+					<span>{content.author.username ?? content.author.name}</span>
 				</Link>
 			</UserInfo>
 			<Content isTopic={!!content.title}>

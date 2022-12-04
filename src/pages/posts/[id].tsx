@@ -42,7 +42,7 @@ const Post: React.FC<PostPageProps> = ({ post }) => {
 				return
 			}
 
-			if (bodyInputRef.current?.value.length ?? 9999 > bodyMaxLength) {
+			if ((bodyInputRef.current?.value.length ?? 9999) > bodyMaxLength) {
 				alert("Please respect answer's body length.")
 				return
 			}

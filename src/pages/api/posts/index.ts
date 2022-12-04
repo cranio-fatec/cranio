@@ -26,6 +26,8 @@ export default async function postRoute(
 	} else if (req.method === 'POST') {
 		try {
 			const post = await createPost(req.body)
+			await res.revalidate(`/posts/${post.id}`)
+			await res.revalidate(`/dashboard`)
 
 			return res.status(200).json(post)
 		} catch (err: any) {
@@ -53,6 +55,8 @@ export async function getPosts(limit?: number) {
 }
 
 export async function createPost(data: CreatePostDTO) {
+	console.log({ data })
+
 	const post = await prisma.post.create({
 		data
 	})

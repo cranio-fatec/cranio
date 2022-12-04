@@ -24,6 +24,7 @@ export const UserInfo = styled.div`
 		justify-content: center;
 	}
 	.icon-container {
+		position: relative;
 		font-size: 60px;
 		background-color: ${({ theme }) => theme.colors.blue_2};
 		color: #ffffff;

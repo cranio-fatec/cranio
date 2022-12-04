@@ -62,6 +62,11 @@ const Header = () => {
 
 	const handleAsk = useCallback(
 		async (e?: React.FormEvent) => {
+			if (!user) {
+				router.push('/signup')
+				return
+			}
+
 			e?.preventDefault()
 			router.push(
 				`/posts/new?question=${questionInputRef.current?.value}`,
@@ -69,7 +74,7 @@ const Header = () => {
 			)
 			questionInputRef.current && (questionInputRef.current.value = '')
 		},
-		[router]
+		[router, user]
 	)
 
 	return (
@@ -87,10 +92,10 @@ const Header = () => {
 				<nav>
 					<ul>
 						<li>
-							<Link href="/">Disciplinas</Link>
+							<Link href="/dashboard">Disciplinas</Link>
 						</li>
 						<li>
-							<Link href="/">Encontre professores</Link>
+							<Link href="/dashboard">Encontre professores</Link>
 						</li>
 					</ul>
 				</nav>

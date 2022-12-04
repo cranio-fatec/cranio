@@ -24,6 +24,7 @@ import {
 import CrownIcon from '../../assets/crown.svg'
 import { PostWithAuthorSubjectAnswers } from '../../components/PostTable/types'
 import { DEFAULT_OPTIONS } from '../../config/swr'
+import { useAuth } from '../../hooks/auth'
 
 interface DashboardProps {
 	subjects: Subject[]
@@ -37,6 +38,8 @@ const Dashboard: React.FC<DashboardProps> = ({
 	leaderboard
 }) => {
 	const [activeSubject, setActiveSubject] = useState<string | null>(null)
+
+	const { user } = useAuth()
 
 	const { data: posts = [], isValidating: loading } = useSWR(
 		activeSubject ? `/subjects/${activeSubject}/posts` : null,
@@ -68,7 +71,7 @@ const Dashboard: React.FC<DashboardProps> = ({
 						))}
 					</ul>
 				</nav>
-				<ButtonsWrapper>
+				<ButtonsWrapper show={!!user}>
 					{/* <button type="button">
               <MdSettings color="#323232" size={24} />
             </button> */}

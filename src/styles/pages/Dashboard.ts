@@ -154,9 +154,16 @@ export const SubjectItem = styled.li<SubjectItemProps>`
 		`}
 `
 
-export const ButtonsWrapper = styled.div`
+export const ButtonsWrapper = styled.div<{ show?: boolean }>`
 	align-self: flex-end;
 	margin-bottom: 12px;
+
+	${({ show }) =>
+		!show &&
+		css`
+			visibility: hidden;
+		`}
+
 	button,
 	a {
 		display: flex;
