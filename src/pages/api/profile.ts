@@ -7,7 +7,7 @@ import { getAuthOptions } from './auth/[...nextauth]'
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 	const session = await unstable_getServerSession(req, res, getAuthOptions(res))
 
-	if (!session) {
+	if (!session?.user?.email) {
 		return res.status(401).end()
 	}
 
