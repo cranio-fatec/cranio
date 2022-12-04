@@ -1,5 +1,4 @@
 import { GetStaticPaths, GetStaticProps } from 'next'
-import { useSession } from 'next-auth/react'
 import React, { useCallback, useRef } from 'react'
 import { MdEdit } from 'react-icons/md'
 import useSWR from 'swr'
@@ -16,6 +15,7 @@ import { PostWithAuthorSubjectAnswers } from '../../components/PostTable/types'
 import { DEFAULT_OPTIONS } from '../../config/swr'
 import { PostLike } from '../../components/PostItem/types'
 import { prisma } from '../../lib/prismadb'
+import { useAuth } from '../../hooks/auth'
 
 interface PostPageProps {
 	post: PostWithAuthorSubjectAnswers
@@ -33,9 +33,7 @@ const Post: React.FC<PostPageProps> = ({ post }) => {
 	)
 
 	const bodyInputRef = useRef<HTMLTextAreaElement>(null)
-	const { data: session } = useSession()
-
-	const user = session?.user
+	const { user } = useAuth()
 
 	const handleAnswer = useCallback(
 		async (e: React.FormEvent) => {
