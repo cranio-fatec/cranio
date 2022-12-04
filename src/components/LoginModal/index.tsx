@@ -88,7 +88,13 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onRequestClose }) => {
 					<Link href="/forgot">Esqueci minha senha</Link>
 					<S.ButtonsContainer>
 						<Link href="/signup">
-							<Button size="small" schema="info" type="button" upper>
+							<Button
+								size="small"
+								schema="info"
+								type="button"
+								upper
+								onClick={onRequestClose}
+							>
 								Cadastrar-se
 							</Button>
 						</Link>

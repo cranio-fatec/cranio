@@ -5,13 +5,26 @@ import { PostStatusProps } from './types'
 export const Container = styled.table`
 	width: 100%;
 
-	tr {
-		height: 56px;
-		display: flex;
-		> a {
+	tbody {
+		/* > a {
 			display: flex;
 			flex: 1;
 			color: ${({ theme }) => theme.colors.text};
+		} */
+	}
+
+	tr {
+		height: 56px;
+		display: flex;
+		flex: 1;
+
+		td {
+			display: flex;
+			flex: 1;
+			a {
+				display: flex;
+				flex: 1;
+			}
 		}
 
 		transition: background-color 0.1s;
@@ -30,7 +43,7 @@ export const Container = styled.table`
 		.title {
 			flex: 1;
 		}
-		td.title {
+		div.title {
 			display: -webkit-box;
 			-webkit-line-clamp: 2;
 			-webkit-box-orient: vertical;
@@ -61,7 +74,7 @@ export const Container = styled.table`
 			color: #333333;
 		}
 
-		td {
+		div {
 			min-width: 168px;
 			padding: 0 12px;
 			margin: auto 0;

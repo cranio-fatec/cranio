@@ -2,6 +2,7 @@ import { Subject } from '@prisma/client'
 import { GetStaticProps } from 'next'
 import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/router'
+import nProgress from 'nprogress'
 import React, { useCallback, useRef, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { MdEdit, MdExtension, MdFormatColorText } from 'react-icons/md'
@@ -68,8 +69,15 @@ const NewPost: React.FC<NewPostProps> = ({ subjects }) => {
 				authorId: user.id
 			}
 
+			nProgress.start()
+
 			const response = await api.post('/posts', data)
-			console.log(response)
+
+			nProgress.done()
+
+			toast.success('Postagem criada com sucesso!', {
+				icon: '🎉'
+			})
 
 			router.push(`/posts/${response.data.id}`)
 		},

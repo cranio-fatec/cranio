@@ -19,6 +19,8 @@ import {
 	UserDataContent
 } from './styles'
 
+const NAME_DIVS = ['de', 'da', 'do', 'dos', 'das']
+
 const Header = () => {
 	const profilePopoutRef = useRef<any>(null)
 	const questionInputRef = useRef<HTMLInputElement>(null)
@@ -43,13 +45,20 @@ const Header = () => {
 	// }, [session, router])
 
 	const fullName = useMemo(() => {
+		const name = user?.username ?? user?.name ?? ''
+
 		const nameArr = user
-			? (user.username ?? user.name ?? '').split('/')[0].split(' ')
+			? name
+					.replace(/\s(de|da|do|dos|das)\s/g, ' ')
+					.split('/')[0]
+					.split(' ')
 			: []
+
+		const div = NAME_DIVS.find((divFind) => name.includes(divFind))
 
 		return user
 			? nameArr.length > 1
-				? `${nameArr[0]} ${nameArr[1]}`
+				? `${nameArr[0]} ${div ? `${div} ` : ''}${nameArr[1]}`
 				: `${nameArr[0]}`
 			: ''
 	}, [user])

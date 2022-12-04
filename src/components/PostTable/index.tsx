@@ -27,20 +27,20 @@ const PostTable: React.FC<PostTableProps> = ({ posts }) => {
 			<tbody>
 				{posts.map((post) => (
 					<tr key={post.id}>
-						<Link href={`/posts/${post.id}`} legacyBehavior>
-							<>
-								<td className="date">
+						<td colSpan={4}>
+							<Link href={`/posts/${post.id}`}>
+								<div className="date">
 									{format(parseDate(post.createdAt), 'dd/MM/yyyy')}
-								</td>
-								<td className="status">
+								</div>
+								<div className="status">
 									<PostStatus closed={post.closed}>
 										{post.closed ? 'Fechada' : 'Aberta'}
 									</PostStatus>
-								</td>
-								<td className="title">{post.title}</td>
-								<td>{post.subject.name}</td>
-							</>
-						</Link>
+								</div>
+								<div className="title">{post.title}</div>
+								<div>{post.subject.name}</div>
+							</Link>
+						</td>
 					</tr>
 				))}
 			</tbody>
