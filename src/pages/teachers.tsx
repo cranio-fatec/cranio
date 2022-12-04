@@ -1,14 +1,11 @@
 import { GetStaticProps } from 'next'
 import React, { useCallback, useMemo, useState } from 'react'
-import { MdAdd } from 'react-icons/md'
 import { Subject, User, UserGraduation } from '@prisma/client'
 import useSWR from 'swr'
 import { NextSeo } from 'next-seo'
 
-import { Link } from '../components/Link'
 import { getTeacherLeaderboard } from './api/teachers/leaderboard'
 import { DEFAULT_OPTIONS } from '../config/swr'
-import { useAuth } from '../hooks/auth'
 import TeacherRanking from '../components/TeacherRanking'
 import { getTeachers } from './api/teachers'
 import { getSubjects } from './api/subjects'
@@ -31,8 +28,6 @@ const Teachers: React.FC<DashboardProps> = ({
 	const [activeSubject, setActiveSubject] = useState<string | null>(null)
 	// const [page] = useState(1)
 
-	const { user } = useAuth()
-
 	const searchParams = useMemo(() => {
 		const params = new URLSearchParams()
 		activeSubject && params.append('subject', activeSubject)
@@ -41,16 +36,20 @@ const Teachers: React.FC<DashboardProps> = ({
 		return params.toString()
 	}, [activeSubject])
 
-	const { data: rawTeachers = [], isValidating: loading } = useSWR<
-		UserWithGraduations[]
-	>(`/teachers?${searchParams}`, {
-		fallbackData: staleTeachers,
-		...DEFAULT_OPTIONS
-	})
+	const { data: rawTeachers, isValidating } = useSWR<UserWithGraduations[]>(
+		`/teachers?${searchParams}`,
+		{
+			fallbackData: staleTeachers,
+			// keepPreviousData: true,
+			...DEFAULT_OPTIONS
+		}
+	)
+
+	const loading = activeSubject !== null && isValidating
 
 	const teachers = useMemo(
 		() =>
-			rawTeachers.map((teacher) => ({
+			rawTeachers?.map((teacher) => ({
 				...teacher,
 				graduations: teacher.graduations.map((graduation) => ({
 					...graduation,
@@ -58,7 +57,7 @@ const Teachers: React.FC<DashboardProps> = ({
 						(subject) => subject.id === graduation.subjectId
 					)
 				}))
-			})),
+			})) ?? [],
 		[rawTeachers, subjects]
 	)
 
@@ -86,41 +85,40 @@ const Teachers: React.FC<DashboardProps> = ({
 							))}
 						</ul>
 					</nav>
-					<S.ButtonsWrapper show={!!user}>
-						{/* <button type="button">
-              <MdSettings color="#323232" size={24} />
-            </button> */}
-						<Link href="/posts/new">
-							<MdAdd color="#323232" size={24} />
-						</Link>
-					</S.ButtonsWrapper>
 					{!loading ? (
-						<S.TeachersGrid>
-							{teachers.map((teacher) => (
-								<S.TeacherItem key={teacher.id} href={`/profile/${teacher.id}`}>
-									<ul>
-										{teacher.graduations.map(({ subject }, index) => {
-											if (!subject || index > 2) {
-												return null
-											}
+						!!teachers.length ? (
+							<S.TeachersGrid>
+								{teachers.map((teacher) => (
+									<S.TeacherItem
+										key={teacher.id}
+										href={`/profile/${teacher.id}`}
+									>
+										<ul>
+											{teacher.graduations.map(({ subject }, index) => {
+												if (!subject || index > 2) {
+													return null
+												}
 
-											return (
-												<S.SubjectItem
-													key={subject.id}
-													subjectId={subject.id as any}
-												>
-													{subject.name}
-												</S.SubjectItem>
-											)
-										})}
-									</ul>
-									<UserAvatar user={teacher} />
-									<S.TeacherName>
-										{teacher.name ?? teacher.username}
-									</S.TeacherName>
-								</S.TeacherItem>
-							))}
-						</S.TeachersGrid>
+												return (
+													<S.SubjectItem
+														key={subject.id}
+														subjectId={subject.id as any}
+													>
+														{subject.name}
+													</S.SubjectItem>
+												)
+											})}
+										</ul>
+										<UserAvatar user={teacher} />
+										<S.TeacherName>
+											{teacher.name ?? teacher.username}
+										</S.TeacherName>
+									</S.TeacherItem>
+								))}
+							</S.TeachersGrid>
+						) : (
+							<div>Não há professores disponíveis com o filtro atual.</div>
+						)
 					) : (
 						<div className="dots-spinner">
 							<div className="bounce1"></div>

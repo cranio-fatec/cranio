@@ -1,4 +1,3 @@
-import { shade } from 'polished'
 import styled, { css } from 'styled-components'
 
 import { Link } from '../../components/Link'
@@ -35,36 +34,6 @@ export const Content = styled.div`
 			display: flex;
 			justify-content: space-between;
 			list-style: none;
-		}
-	}
-`
-
-export const ButtonsWrapper = styled.div<{ show?: boolean }>`
-	align-self: flex-end;
-	margin-bottom: 12px;
-
-	${({ show }) =>
-		!show &&
-		css`
-			visibility: hidden;
-		`}
-
-	button,
-	a {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		text-decoration: none;
-		border: none;
-		outline: none;
-		background-color: #e5e5e5;
-		border-radius: 4px;
-		width: 40px;
-		height: 40px;
-
-		transition: background-color 0.2s;
-		&:hover {
-			background-color: ${shade(0.1, '#e5e5e5')};
 		}
 	}
 `
