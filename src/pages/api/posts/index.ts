@@ -28,9 +28,7 @@ export default async function postRoute(
 		try {
 			const post = await createPost(req.body)
 
-			revalidatePostRelated(res, post.id)
-
-			await new Promise((resolve) => setTimeout(resolve, 100))
+			await revalidatePostRelated(res, post.id)
 
 			return res.status(200).json(post)
 		} catch (err: any) {

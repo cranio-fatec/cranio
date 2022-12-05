@@ -23,13 +23,12 @@ export default async function answersRoute(
 		}
 	} else if (req.method === 'POST') {
 		try {
-			const post = await createAnswer({ ...req.body })
+			const [answer] = await Promise.all([
+				createAnswer({ ...req.body }),
+				revalidatePostRelated(res, req.query.id as string)
+			])
 
-			revalidatePostRelated(res, post.id)
-
-			await new Promise((resolve) => setTimeout(resolve, 100))
-
-			return res.status(200).json(post)
+			return res.status(200).json(answer)
 		} catch (err: any) {
 			return res.status(400).json({ error: err.message })
 		}
