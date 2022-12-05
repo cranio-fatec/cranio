@@ -7,7 +7,7 @@ import { PostItemProps } from './types'
 
 const PostItem: React.FC<PostItemProps> = ({ content, isOdd }) => {
 	return (
-		<Container isOdd={isOdd}>
+		<Container isOdd={isOdd} isLoading={content.loading}>
 			<UserInfo className="user-info">
 				<Link href={`/profile/${content.authorId}`}>
 					<UserAvatar user={content.author} />

@@ -5,11 +5,19 @@ import { ContainerStyleProps, ContentStyleProps } from './types'
 export const Container = styled.li<ContainerStyleProps>`
 	display: flex;
 	min-height: 230px;
+	transition: opacity 0.3s, background-color 0.3s;
 
 	${({ isOdd, theme }) =>
 		isOdd &&
 		css`
 			background-color: ${theme.colors.blue__1};
+		`}
+
+	${({ isLoading, theme }) =>
+		isLoading &&
+		css`
+			opacity: 0.5;
+			background-color: ${theme.colors.grey_5};
 		`}
 `
 

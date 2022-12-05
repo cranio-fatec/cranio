@@ -6,6 +6,7 @@ export interface PostLike {
 	body: string
 	authorId: string
 	author: User
+	loading?: boolean
 }
 
 export interface PostItemProps {
@@ -15,6 +16,7 @@ export interface PostItemProps {
 
 export interface ContainerStyleProps {
 	isOdd: boolean
+	isLoading?: boolean
 }
 
 export interface ContentStyleProps {

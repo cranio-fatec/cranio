@@ -52,13 +52,41 @@ const Post: React.FC<PostPageProps> = ({ post }) => {
 
 			const data = {
 				postId: post.id,
-				body: bodyInputRef.current?.value.trim(),
+				body: bodyInputRef.current?.value.trim() ?? '',
 				authorId: user.id
 			}
 
-			await api.post(`/posts/${post.id}/answers`, data)
+			mutate(
+				async (old = []) => {
+					const { data: answerCreated } = await api.post(
+						`/posts/${post.id}/answers`,
+						data
+					)
 
-			mutate()
+					return [...old, answerCreated]
+				},
+				{
+					revalidate: false,
+					optimisticData: (old = []) => [
+						...old,
+						{
+							...data,
+							id: data.body ?? 'revalidating...',
+							author: user,
+							loading: true
+						}
+					]
+				}
+			)
+				.then(() => {
+					toast.success('Resposta postada com sucesso!', {
+						icon: '🎉'
+					})
+				})
+				.catch(() => {
+					toast.error('Ocorreu um erro ao postar a sua resposta!')
+				})
+
 			bodyInputRef.current && (bodyInputRef.current.value = '')
 		},
 		[mutate, post.id, user]
