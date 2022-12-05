@@ -111,8 +111,8 @@ const Header = () => {
 				<form onSubmit={handleAsk}>
 					<Input
 						type="text"
-						name="search"
-						id="search"
+						name="ask-header"
+						id="ask-header"
 						placeholder="Faça uma pergunta..."
 						rightIcon={MdSearch}
 						ref={questionInputRef}

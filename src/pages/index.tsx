@@ -118,8 +118,8 @@ const Home: React.FC = () => {
 						>
 							<Input
 								type="text"
-								name="search"
-								id="search"
+								name="ask"
+								id="ask"
 								placeholder="Faça uma pergunta..."
 								rightIcon={MdSearch}
 								onClickIcon={handleAsk}
@@ -135,8 +135,8 @@ const Home: React.FC = () => {
 						>
 							<Input
 								type="text"
-								name="search"
-								id="search"
+								name="search-teacher"
+								id="search-teacher"
 								placeholder="Pesquise por algum professor..."
 								rightIcon={MdSearch}
 							/>

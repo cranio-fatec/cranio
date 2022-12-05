@@ -31,7 +31,7 @@ interface DashboardProps {
 }
 
 const Dashboard: React.FC<DashboardProps> = ({
-	posts: postsSsr,
+	posts: stalePosts,
 	subjects,
 	leaderboard
 }) => {
@@ -42,7 +42,7 @@ const Dashboard: React.FC<DashboardProps> = ({
 	const { data: posts = [], isValidating: loading } = useSWR(
 		activeSubject ? `/subjects/${activeSubject}/posts` : null,
 		{
-			fallbackData: postsSsr,
+			fallbackData: stalePosts,
 			...DEFAULT_OPTIONS
 		}
 	)
