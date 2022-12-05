@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo } from 'react'
+import { toast } from 'react-hot-toast'
 import { FiThumbsUp, FiThumbsDown } from 'react-icons/fi'
 
 import { useAuth } from '../../hooks/auth'
@@ -37,11 +38,19 @@ const PostItem: React.FC<PostItemProps> = ({
 	const handleLike = useCallback(async () => {
 		await api.post(`/like/${content.id}`)
 
+		toast.success('Reposta reagida com sucesso!', {
+			icon: '🎉'
+		})
+
 		mutateReactions?.()
 	}, [content.id, mutateReactions])
 
 	const handleDislike = useCallback(async () => {
 		await api.post(`/dislike/${content.id}`)
+
+		toast.success('Reposta reagida com sucesso!', {
+			icon: '🎉'
+		})
 
 		mutateReactions?.()
 	}, [content.id, mutateReactions])

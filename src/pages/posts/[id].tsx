@@ -104,6 +104,9 @@ const Post: React.FC<PostPageProps> = ({ post }) => {
 	const handleClosePost = useCallback(async () => {
 		await api.patch(`/posts/${post.id}/close`)
 		setIsClosed(true)
+		toast.success('Tópico fechado com sucesso!', {
+			icon: '🎉'
+		})
 	}, [post.id])
 
 	return (
