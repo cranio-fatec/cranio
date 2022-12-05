@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useCallback, useRef } from 'react'
 import { MdSearch } from 'react-icons/md'
 import Image from 'next/image'
-
 // import { getSession } from 'next-auth/react'
 // import Button from '../components/Button'
 // import { Link } from '../components/Link'
 // import { SignInButton } from '../components/SignInButton'
+import { useRouter } from 'next/router'
+import useSWR from 'swr'
+
 import PeopleSVG from '../assets/peaple.svg'
 import * as S from '../styles/pages/Home'
 import theme from '../styles/theme'
@@ -13,10 +15,40 @@ import { Link } from '../components/Link'
 import Button from '../components/Button'
 import { SignInButton } from '../components/SignInButton'
 import Input from '../components/Input'
+import { useAuth } from '../hooks/auth'
+import { DEFAULT_OPTIONS } from '../config/swr'
+import { PostWithAuthorSubject } from './api/posts/recents'
+import UserAvatar from '../components/UserAvatar'
 // import Input from '../components/Input'
 // import PageSkeleton from '../components/PageSkeleton'
 
 const Home: React.FC = () => {
+	const { user } = useAuth()
+	const router = useRouter()
+	const questionInputRef = useRef<HTMLInputElement>(null)
+
+	const handleAsk = useCallback(
+		async (e?: React.FormEvent) => {
+			if (!user) {
+				router.push('/signup')
+				return
+			}
+
+			e?.preventDefault()
+			router.push(
+				`/posts/new?question=${questionInputRef.current?.value}`,
+				'/posts/new'
+			)
+			questionInputRef.current && (questionInputRef.current.value = '')
+		},
+		[router, user]
+	)
+
+	const { data: recentPosts, isValidating } = useSWR<PostWithAuthorSubject[]>(
+		`/posts/recents`,
+		DEFAULT_OPTIONS
+	)
+
 	return (
 		<>
 			<S.Article className="first" background={theme.colors.blue_0}>
@@ -28,10 +60,18 @@ const Home: React.FC = () => {
 							com outros estudantes em um ambiente agradável e seguro!
 						</p>
 						<div>
-							<Link href="/signup">
-								<Button width="205px">Cadastre-se agora</Button>
-							</Link>
-							<SignInButton />
+							{!user ? (
+								<>
+									<Link href="/signup">
+										<Button width="205px">Cadastre-se agora</Button>
+									</Link>
+									<SignInButton />
+								</>
+							) : (
+								<Link href="/dashboard">
+									<Button width="205px">Acesse agora</Button>
+								</Link>
+							)}
 						</div>
 					</section>
 					<section className="right">
@@ -70,17 +110,29 @@ const Home: React.FC = () => {
 				<h1>Comece agora mesmo</h1>
 				<div>
 					<section className="left">
-						<form>
+						<form
+							onSubmit={(e) => {
+								e.preventDefault()
+								handleAsk()
+							}}
+						>
 							<Input
 								type="text"
 								name="search"
 								id="search"
 								placeholder="Faça uma pergunta..."
 								rightIcon={MdSearch}
+								onClickIcon={handleAsk}
+								ref={questionInputRef}
 							/>
 						</form>
 						<span>ou</span>
-						<form>
+						<form
+							onSubmit={(e) => {
+								e.preventDefault()
+								router.push('/teachers')
+							}}
+						>
 							<Input
 								type="text"
 								name="search"
@@ -96,6 +148,46 @@ const Home: React.FC = () => {
 							Dê uma olhada nas perguntas mais recentes, talvez você já consiga
 							ajudar alguém :)
 						</h2>
+						<S.RecentPostsContainer>
+							<h3>Perguntas recentes</h3>
+							{!isValidating ? (
+								<S.PostsList>
+									{recentPosts?.map((post) => (
+										<li key={post.id}>
+											<S.PostHeader>
+												<Link href={`/users/${post.authorId}`}>
+													<UserAvatar user={post.author} />
+												</Link>
+												<div>
+													<Link href={`/posts/${post.id}`}>
+														<strong>{post.title}</strong>
+													</Link>
+													<br />
+													<Link href={`/users/${post.authorId}`}>
+														<span>
+															{post.author.name ?? post.author.username ?? ''}
+														</span>
+													</Link>
+												</div>
+												<S.SubjectItem subjectId={post.subject.id as any}>
+													{post.subject.name}
+												</S.SubjectItem>
+											</S.PostHeader>
+											<Link href={`/posts/${post.id}`}>
+												<S.PostBody>{post.body}</S.PostBody>
+											</Link>
+										</li>
+									))}
+									<S.SeeMore href="/dashboard">Ver mais</S.SeeMore>
+								</S.PostsList>
+							) : (
+								<S.LoadingDots className="dots-spinner">
+									<div className="bounce1"></div>
+									<div className="bounce2"></div>
+									<div className="bounce3"></div>
+								</S.LoadingDots>
+							)}
+						</S.RecentPostsContainer>
 					</section>
 				</div>
 			</S.Article>

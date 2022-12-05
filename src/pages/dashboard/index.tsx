@@ -108,6 +108,7 @@ export const getStaticProps: GetStaticProps = async () => {
 			posts,
 			leaderboard: leaderboard.filter((_, index) => index < 3)
 		}
+		// revalidate: 60 * 60
 	}
 }
 

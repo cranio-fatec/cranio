@@ -1,6 +1,8 @@
 import styled, { css } from 'styled-components'
 
+import { Link } from '../../components/Link'
 import { containerCenter } from '../utils/containerCenter'
+import { SubjectItemProps } from './Dashboard'
 
 interface ArticleProps {
 	background?: string
@@ -105,7 +107,7 @@ export const Article = styled.article<ArticleProps>`
 			}
 		}
 		.right {
-			flex: 1;
+			width: 100%;
 			h2 {
 				font-weight: 500;
 				font-size: 36px;
@@ -163,4 +165,146 @@ export const VerticalDivider = styled.div`
 
 export const Title = styled.h1`
 	font-size: 40px;
+`
+
+export const RecentPostsContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	border: 1px solid ${({ theme }) => theme.colors.grey_5};
+	border-radius: 4px;
+
+	padding: 16px 24px;
+	gap: unset !important;
+
+	h3 {
+		font-weight: 500;
+		font-size: 20px;
+		line-height: 30px;
+		margin-bottom: 20px;
+	}
+`
+export const LoadingDots = styled.div`
+	height: 345px;
+	margin: auto !important;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+`
+
+export const PostsList = styled.ul`
+	display: flex;
+	flex-direction: column;
+
+	list-style: none;
+
+	li {
+		&:not(:first-child) {
+			margin-top: 24px;
+		}
+	}
+`
+
+export const SubjectItem = styled.li<SubjectItemProps>`
+	width: 86px;
+	height: 23px;
+	background-color: ${({ subjectId, theme }) =>
+		theme.colors.subjects[subjectId].background};
+	color: ${({ subjectId, theme }) => theme.colors.subjects[subjectId].text};
+	font-weight: 500;
+	font-size: 10px;
+	line-height: 16px;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	letter-spacing: 1.25px;
+	text-transform: uppercase;
+	box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.2), 0px 3px 4px rgba(0, 0, 0, 0.12),
+		0px 2px 4px rgba(0, 0, 0, 0.14);
+	border-radius: 4px;
+	cursor: pointer;
+	user-select: none;
+	border: 1px solid transparent;
+
+	transition: border-color 0.2s;
+	${({ active, theme }) =>
+		active &&
+		css`
+			border-color: ${theme.colors.red};
+		`}
+`
+
+export const PostHeader = styled.div`
+	display: flex;
+	align-items: center;
+	margin-bottom: 12px;
+
+	.icon-container {
+		position: relative;
+		font-size: 24px;
+		background-color: ${({ theme }) => theme.colors.blue_2};
+		color: #ffffff;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border-radius: 50%;
+		overflow: hidden;
+		cursor: pointer;
+		width: 40px;
+		height: 40px;
+		margin: 0 10px;
+		img {
+			width: 100%;
+			height: 100%;
+
+			line-height: 40px;
+			text-align: center;
+		}
+	}
+
+	strong {
+		font-weight: 500;
+		font-size: 14px;
+		line-height: 10px;
+	}
+
+	span {
+		font-weight: 400;
+		font-size: 12px;
+		line-height: 10px;
+		margin-top: -4px;
+	}
+
+	${SubjectItem} {
+		margin-left: auto;
+		margin-top: auto;
+	}
+`
+
+export const PostBody = styled.p`
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	font-weight: 400 !important;
+	font-size: 12px !important;
+	line-height: 15px !important;
+	height: 30px;
+	text-align: left !important;
+
+	letter-spacing: 0.1px !important;
+`
+
+export const SeeMore = styled(Link)`
+	font-weight: 500;
+	font-size: 20px;
+	line-height: 30px;
+	/* or 150% */
+
+	letter-spacing: 0.15px;
+	margin-left: auto;
+
+	color: ${({ theme }) => theme.colors.blue_0};
 `
