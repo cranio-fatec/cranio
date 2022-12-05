@@ -59,7 +59,7 @@ export default async function postRoute(
 		}
 
 		const [updatedPost] = await Promise.all([
-			(prisma.post.update({
+			prisma.post.update({
 				where: {
 					id: postId
 				},
@@ -68,7 +68,7 @@ export default async function postRoute(
 				}
 			}),
 			res.revalidate(`/posts/${postId}`),
-			res.revalidate(`/dashboard`))
+			res.revalidate(`/dashboard`)
 		])
 
 		return res.status(200).json(updatedPost)

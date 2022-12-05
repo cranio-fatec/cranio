@@ -21,8 +21,8 @@ interface NewPostProps {
 	subjects: Subject[]
 }
 
-const titleMaxLength = 120
-const bodyMaxLength = 500
+export const POST_TITLE_MAX_LENGTH = 120
+export const BODY_MAX_LENGTH = 500
 
 const NewPost: React.FC<NewPostProps> = ({ subjects }) => {
 	const titleInputRef = useRef<HTMLInputElement>(null)
@@ -50,10 +50,12 @@ const NewPost: React.FC<NewPostProps> = ({ subjects }) => {
 			}
 
 			let error = false
-			if ((titleInputRef.current?.value.length ?? 999) > titleMaxLength) {
+			if (
+				(titleInputRef.current?.value.length ?? 999) > POST_TITLE_MAX_LENGTH
+			) {
 				error = true
 			}
-			if ((bodyInputRef.current?.value.length ?? 999) > bodyMaxLength) {
+			if ((bodyInputRef.current?.value.length ?? 999) > BODY_MAX_LENGTH) {
 				error = true
 			}
 
@@ -97,7 +99,7 @@ const NewPost: React.FC<NewPostProps> = ({ subjects }) => {
 						labelRequired
 						placeholder="Digite o título da postagem"
 						leftIcon={MdFormatColorText}
-						maxLength={titleMaxLength}
+						maxLength={POST_TITLE_MAX_LENGTH}
 						ref={titleInputRef}
 					/>
 					<Select
@@ -123,7 +125,7 @@ const NewPost: React.FC<NewPostProps> = ({ subjects }) => {
 						labelRequired
 						placeholder="Corpo da postagem"
 						leftIcon={MdEdit}
-						maxLength={bodyMaxLength}
+						maxLength={BODY_MAX_LENGTH}
 						height="256px"
 						ref={bodyInputRef}
 					/>

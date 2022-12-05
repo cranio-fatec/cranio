@@ -4,6 +4,7 @@ import { MdEdit } from 'react-icons/md'
 import useSWR from 'swr'
 import { NextSeo } from 'next-seo'
 import { toast } from 'react-hot-toast'
+import { isAxiosError } from 'axios'
 
 import { getPostById } from '../api/posts/[id]'
 import { Container } from '../../styles/pages/Post'
@@ -102,11 +103,19 @@ const Post: React.FC<PostPageProps> = ({ post }) => {
 	)
 
 	const handleClosePost = useCallback(async () => {
-		await api.patch(`/posts/${post.id}/close`)
-		setIsClosed(true)
-		toast.success('Tópico fechado com sucesso!', {
-			icon: '🎉'
-		})
+		try {
+			await api.patch(`/posts/${post.id}/close`)
+			setIsClosed(true)
+			toast.success('Tópico fechado com sucesso!', {
+				icon: '🎉'
+			})
+		} catch (err) {
+			if (isAxiosError(err)) {
+				toast.error(`Ocorreu um erro: ${err.response?.data.message}`)
+				return
+			}
+			toast.error(`Ocorreu um erro.`)
+		}
 	}, [post.id])
 
 	return (
