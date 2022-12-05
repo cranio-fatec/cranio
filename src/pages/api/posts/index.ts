@@ -1,8 +1,8 @@
 import { prisma } from '../../../lib/prismadb'
-import { handler } from '../../../utils/handler'
+import ApiError from '../../../utils/ApiError'
+import { apiHandler } from '../../../utils/apiHandler'
 import { revalidatePostRelated } from '../../../utils/revalidatePostRelated'
 import { BODY_MAX_LENGTH, POST_TITLE_MAX_LENGTH } from '../../posts/new'
-import ApiError from '../../../utils/ApiError'
 
 interface CreatePostDTO {
 	title: string
@@ -11,21 +11,32 @@ interface CreatePostDTO {
 	authorId: string
 }
 
-export default handler
-	.get(async (req, res) => {
-		const posts = await getPosts(
-			req.query.limit ? Number(req.query.limit) : undefined
-		)
+export default apiHandler(async (req, res) => {
+	if (req.method === 'GET') {
+		try {
+			const posts = await getPosts(
+				req.query.limit ? Number(req.query.limit) : undefined
+			)
 
-		return res.status(200).json(posts)
-	})
-	.post(async (req, res) => {
-		const post = await createPost(req.body)
+			return res.status(200).json(posts)
+		} catch (err: any) {
+			return res.status(400).json({ error: err.message })
+		}
+	} else if (req.method === 'POST') {
+		try {
+			const post = await createPost(req.body)
 
-		await revalidatePostRelated(res, post.id)
+			await revalidatePostRelated(res, post.id)
 
-		return res.status(200).json(post)
-	})
+			return res.status(200).json(post)
+		} catch (err: any) {
+			return res.status(400).json({ error: err.message })
+		}
+	} else {
+		res.setHeader('Allow', 'GET, POST')
+		res.status(405).end('Method not allowed')
+	}
+})
 
 export async function getPosts(limit?: number) {
 	const posts = await prisma.post.findMany({

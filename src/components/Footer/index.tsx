@@ -18,8 +18,11 @@ const Footer: React.FC = () => {
 							priority
 						/>
 					</Link>
-					<Link href="/">Conheça o projeto</Link>
-					<Link href="/">Sobre os autores</Link>
+					<Link href="/about">
+						Conheça o projeto
+						<br />
+						Sobre os autores
+					</Link>
 				</LeftWrapper>
 				<RightWrapper>
 					<h3>Mapa do site</h3>
