@@ -27,6 +27,8 @@ export default async function answersRoute(
 
 			revalidatePostRelated(res, post.id)
 
+			await new Promise((resolve) => setTimeout(resolve, 100))
+
 			return res.status(200).json(post)
 		} catch (err: any) {
 			return res.status(400).json({ error: err.message })

@@ -7,9 +7,9 @@ export const revalidatePostRelated = (
 ) => {
 	const path = `/api/revalidate${postId ? `?postId=${postId}` : ''}`
 
-	return axios.get(
-		process.env.VERCEL_URL
-			? `https://${process.env.VERCEL_URL}${path}`
-			: 'http://localhost:3000${path}'
-	)
+	const url = process.env.VERCEL_URL
+		? `https://${process.env.VERCEL_URL}${path}`
+		: `http://localhost:3000${path}`
+
+	return axios.get(url)
 }
