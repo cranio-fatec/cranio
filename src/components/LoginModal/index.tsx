@@ -110,7 +110,9 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onRequestClose }) => {
 					</S.ButtonsContainer>
 				</form>
 				<GoogleOAuthButton
-					onClick={() => signIn('google')}
+					onClick={() =>
+						signIn('google', { redirect: true, callbackUrl: '/dashboard' })
+					}
 					color={theme.colors.blue_1}
 				>
 					Continuar com o Google

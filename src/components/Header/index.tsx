@@ -104,7 +104,7 @@ const Header = () => {
 							<Link href="/dashboard">Disciplinas</Link>
 						</li>
 						<li>
-							<Link href="/dashboard">Encontre professores</Link>
+							<Link href="/teachers">Encontre professores</Link>
 						</li>
 					</ul>
 				</nav>

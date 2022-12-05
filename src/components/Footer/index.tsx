@@ -24,9 +24,9 @@ const Footer: React.FC = () => {
 				<RightWrapper>
 					<h3>Mapa do site</h3>
 					<div>
-						<Link href="/">Disciplinas</Link>
-						<Link href="/">Busque professores</Link>
-						<Link href="/">Postagens Recentes</Link>
+						<Link href="/dashboard">Disciplinas</Link>
+						<Link href="/teachers">Busque professores</Link>
+						<Link href="/dashboard">Postagens Recentes</Link>
 					</div>
 				</RightWrapper>
 			</Content>

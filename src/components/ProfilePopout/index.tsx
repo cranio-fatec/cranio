@@ -22,7 +22,8 @@ const ProfilePopout = ({ isOpen }: ProfilePopoutProps, ref: any) => {
 						</Link>
 					</li>
 					<li>
-						<Link href="/settings">
+						{/* <Link href="/settings"> */}
+						<Link href="/profile">
 							<FaUserCog size={size} />
 							Configurações
 						</Link>

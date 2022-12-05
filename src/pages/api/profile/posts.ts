@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { unstable_getServerSession } from 'next-auth'
 
-import { prisma } from '../../lib/prismadb'
-import { getAuthOptions } from './auth/[...nextauth]'
+import { prisma } from '../../../lib/prismadb'
+import { getAuthOptions } from '../auth/[...nextauth]'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 	const session = await unstable_getServerSession(req, res, getAuthOptions(res))
@@ -11,17 +11,27 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 		return res.status(401).end()
 	}
 
-	const user = await prisma.user.findFirst({
+	const subject = req.query.subject as string | undefined
+
+	const posts = await prisma.post.findMany({
 		where: {
-			email: session.user.email
+			author: {
+				email: session.user.email
+			},
+			subject: subject
+				? {
+						id: subject
+				  }
+				: undefined
 		},
 		include: {
-			// favoriteSubject: true,
-			graduations: true
+			author: true,
+			subject: true,
+			answers: true
 		}
 	})
 
-	res.json(user)
+	res.json(posts)
 }
 
 export default handler

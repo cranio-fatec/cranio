@@ -8,6 +8,7 @@ import nookies, { destroyCookie } from 'nookies'
 import { Subject } from '@prisma/client'
 import { isAxiosError } from 'axios'
 import { toast } from 'react-hot-toast'
+import { NextSeo } from 'next-seo'
 
 import Input from '../../components/Input'
 import { Container } from '../../styles/pages/Signup'
@@ -123,79 +124,82 @@ const Signup: React.FC<SignupProps> = ({ googleData, subjects }) => {
 	)
 
 	return (
-		<Container onSubmit={handleSubmit}>
-			{!googleData && (
-				<article className="signup">
-					<h1>Cadastrar-se</h1>
-					<div>
-						<section>
-							<Input
-								type="email"
-								label="E-mail"
-								required
-								labelRequired
-								placeholder="Digite seu e-mail"
-								leftIcon={MdMail}
-								onChange={(e) => setEmail(e.target.value)}
-								value={email}
-								ref={emailInputRef}
-							/>
-							<Input
-								type="username"
-								placeholder="Digite seu nome ou um nome de usuário"
-								required
-								labelRequired
-								label="Nome de Usuário"
-								leftIcon={FiUser}
-								onChange={(e) => setUsername(e.target.value)}
-								value={username}
-								ref={usernameInputRef}
-							/>
-						</section>
-						<section>
-							<Input
-								type="password"
-								label="Senha"
-								labelRequired
-								required
-								placeholder="Digite sua senha"
-								leftIcon={MdLock}
-								onChange={(e) => setPassword(e.target.value)}
-								value={password}
-								ref={passwordInputRef}
-							/>
-							<Input
-								type="password"
-								placeholder="Confirme sua senha"
-								required
-								labelRequired
-								label="Confirmar Senha"
-								leftIcon={MdLock}
-								onChange={(e) => setConfirmPassword(e.target.value)}
-								value={confirmPassword}
-								ref={confirmPasswordInputRef}
-							/>
-						</section>
-					</div>
+		<>
+			<NextSeo title="Cadastre-se" />
+			<Container onSubmit={handleSubmit}>
+				{!googleData && (
+					<article className="signup">
+						<h1>Cadastrar-se</h1>
+						<div>
+							<section>
+								<Input
+									type="email"
+									label="E-mail"
+									required
+									labelRequired
+									placeholder="Digite seu e-mail"
+									leftIcon={MdMail}
+									onChange={(e) => setEmail(e.target.value)}
+									value={email}
+									ref={emailInputRef}
+								/>
+								<Input
+									type="username"
+									placeholder="Digite seu nome ou um nome de usuário"
+									required
+									labelRequired
+									label="Nome de Usuário"
+									leftIcon={FiUser}
+									onChange={(e) => setUsername(e.target.value)}
+									value={username}
+									ref={usernameInputRef}
+								/>
+							</section>
+							<section>
+								<Input
+									type="password"
+									label="Senha"
+									labelRequired
+									required
+									placeholder="Digite sua senha"
+									leftIcon={MdLock}
+									onChange={(e) => setPassword(e.target.value)}
+									value={password}
+									ref={passwordInputRef}
+								/>
+								<Input
+									type="password"
+									placeholder="Confirme sua senha"
+									required
+									labelRequired
+									label="Confirmar Senha"
+									leftIcon={MdLock}
+									onChange={(e) => setConfirmPassword(e.target.value)}
+									value={confirmPassword}
+									ref={confirmPasswordInputRef}
+								/>
+							</section>
+						</div>
+					</article>
+				)}
+				<article className="second-part">
+					<h1>
+						Cadastrar-se como{' '}
+						<span onClick={() => setCurrentForm('student')}>aluno</span> ou{' '}
+						<span onClick={() => setCurrentForm('teacher')}>professor</span>?
+					</h1>
+					<div>{formMaps[currentForm]}</div>
+					<Button
+						width="400px"
+						schema="darkblue"
+						margin="84px 0 0 0"
+						type="submit"
+					>
+						Cadastrar-se
+					</Button>
 				</article>
-			)}
-			<article className="second-part">
-				<h1>
-					Cadastrar-se como{' '}
-					<span onClick={() => setCurrentForm('student')}>aluno</span> ou{' '}
-					<span onClick={() => setCurrentForm('teacher')}>professor</span>?
-				</h1>
-				<div>{formMaps[currentForm]}</div>
-				<Button
-					width="400px"
-					schema="darkblue"
-					margin="84px 0 0 0"
-					type="submit"
-				>
-					Cadastrar-se
-				</Button>
-			</article>
-		</Container>
+			</Container>
+		</>
 	)
 }
 

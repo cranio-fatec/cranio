@@ -35,6 +35,11 @@ const buttonSchemas: { [name: string]: Theme } = {
 		text: colors.blue_1,
 		background: colors.blue__1,
 		hoverBackground: shade(0.1, colors.blue__1)
+	},
+	danger: {
+		text: 'white',
+		background: colors.danger_1,
+		hoverBackground: shade(0.1, colors.danger_1)
 	}
 }
 

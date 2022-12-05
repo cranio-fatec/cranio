@@ -89,10 +89,7 @@ const Teachers: React.FC<DashboardProps> = ({
 						!!teachers.length ? (
 							<S.TeachersGrid>
 								{teachers.map((teacher) => (
-									<S.TeacherItem
-										key={teacher.id}
-										href={`/profile/${teacher.id}`}
-									>
+									<S.TeacherItem key={teacher.id} href={`/user/${teacher.id}`}>
 										<ul>
 											{teacher.graduations.map(({ subject }, index) => {
 												if (!subject || index > 2) {

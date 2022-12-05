@@ -55,7 +55,6 @@ export async function createAnswer(data: CreateAnswerDTO) {
 	const answer = await prisma.answer.create({
 		data,
 		include: {
-			reactions: true,
 			author: true
 		}
 	})

@@ -1,4 +1,7 @@
 import { User } from '@prisma/client'
+import { KeyedMutator } from 'swr'
+
+import { AnswerReactionsData } from '../../pages/api/posts/[id]/answers/reactions'
 
 export interface PostLike {
 	id: string
@@ -12,6 +15,8 @@ export interface PostLike {
 export interface PostItemProps {
 	content: PostLike
 	isOdd: boolean
+	reactions?: AnswerReactionsData['reactions']
+	mutateReactions?: KeyedMutator<any>
 }
 
 export interface ContainerStyleProps {

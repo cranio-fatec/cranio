@@ -65,6 +65,33 @@ export const UserInfo = styled.div`
 	}
 `
 
+export const ReactionsWrapper = styled.div<{ hidden: boolean }>`
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-top: 14px;
+	margin-bottom: 14px;
+	padding: 0 50px;
+
+	${({ hidden }) =>
+		hidden &&
+		css`
+			visibility: hidden;
+		`};
+
+	button {
+		outline: none;
+		border: none;
+		background-color: transparent;
+
+		cursor: pointer;
+
+		&:disabled {
+			cursor: not-allowed;
+		}
+	}
+`
+
 export const Content = styled.div<ContentStyleProps>`
 	flex: 1;
 	padding: ${({ isTopic }) =>

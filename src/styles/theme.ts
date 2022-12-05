@@ -8,6 +8,7 @@ const theme = {
 		blue_1: '#2196F3',
 		blue_2: '#007AFF',
 
+		green: '#00750A',
 		yellow: '#FFFF00',
 		red: '#EB5757',
 

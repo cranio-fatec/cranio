@@ -1,5 +1,5 @@
 import { GetStaticPaths, GetStaticProps } from 'next'
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { MdEdit } from 'react-icons/md'
 import useSWR from 'swr'
 import { NextSeo } from 'next-seo'
@@ -16,6 +16,7 @@ import { DEFAULT_OPTIONS } from '../../config/swr'
 import { PostLike } from '../../components/PostItem/types'
 import { prisma } from '../../lib/prismadb'
 import { useAuth } from '../../hooks/auth'
+import { AnswerReactionsData } from '../api/posts/[id]/answers/reactions'
 
 interface PostPageProps {
 	post: PostWithAuthorSubjectAnswers
@@ -24,6 +25,8 @@ interface PostPageProps {
 const bodyMaxLength = 500
 
 const Post: React.FC<PostPageProps> = ({ post }) => {
+	const [isClosed, setIsClosed] = useState(post.closed)
+
 	const { data: answers = [], mutate } = useSWR<PostLike[]>(
 		`/posts/${post.id}/answers`,
 		{
@@ -31,6 +34,12 @@ const Post: React.FC<PostPageProps> = ({ post }) => {
 			...DEFAULT_OPTIONS
 		}
 	)
+
+	const { data: reactions, mutate: mutateReactions } =
+		useSWR<AnswerReactionsData>(
+			`/posts/${post.id}/answers/reactions`,
+			DEFAULT_OPTIONS
+		)
 
 	const bodyInputRef = useRef<HTMLTextAreaElement>(null)
 	const { user } = useAuth()
@@ -92,6 +101,11 @@ const Post: React.FC<PostPageProps> = ({ post }) => {
 		[mutate, post.id, user]
 	)
 
+	const handleClosePost = useCallback(async () => {
+		await api.patch(`/posts/${post.id}/close`)
+		setIsClosed(true)
+	}, [post.id])
+
 	return (
 		<>
 			<NextSeo title={post.title} />
@@ -103,29 +117,44 @@ const Post: React.FC<PostPageProps> = ({ post }) => {
 							key={answer.id}
 							content={answer}
 							isOdd={Boolean(index % 2)}
+							reactions={reactions?.reactions}
+							mutateReactions={mutateReactions}
 						/>
 					))}
 				</ol>
-				{user && (
-					<form onSubmit={handleAnswer}>
-						<h2>Adicione uma resposta para a discussão</h2>
-						<Textarea
-							required
-							placeholder="Escreva aqui sua resposta"
-							leftIcon={MdEdit}
-							maxLength={bodyMaxLength}
-							height="256px"
-							ref={bodyInputRef}
-						/>
-						<Button
-							type="submit"
-							schema="darkblue"
-							margin="24px 0 0 0"
-							width="800px"
-						>
-							Publicar
-						</Button>
-					</form>
+				{user && !isClosed && (
+					<>
+						<form onSubmit={handleAnswer}>
+							<h2>Adicione uma resposta para a discussão</h2>
+							<Textarea
+								required
+								placeholder="Escreva aqui sua resposta"
+								leftIcon={MdEdit}
+								maxLength={bodyMaxLength}
+								height="256px"
+								ref={bodyInputRef}
+							/>
+							<Button
+								type="submit"
+								schema="darkblue"
+								margin="24px 0 0 0"
+								width="800px"
+							>
+								Publicar
+							</Button>
+						</form>
+						{user.id === post.authorId && (
+							<Button
+								type="submit"
+								schema="danger"
+								margin="24px auto 0 auto"
+								width="400px"
+								onClick={handleClosePost}
+							>
+								Fechar tópico
+							</Button>
+						)}
+					</>
 				)}
 			</Container>
 		</>
