@@ -24,7 +24,11 @@ export async function getPostById(id: string) {
 		include: {
 			author: true,
 			subject: true,
-			answers: true
+			answers: {
+				include: {
+					author: true
+				}
+			}
 		}
 	})
 
