@@ -5,9 +5,11 @@ import { prisma } from '../../../lib/prismadb'
 import { getAuthOptions } from '../auth/[...nextauth]'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+	const id = req.query.userId as string | undefined
+
 	const session = await unstable_getServerSession(req, res, getAuthOptions(res))
 
-	if (!session?.user?.email) {
+	if (!session?.user?.email && !id) {
 		return res.status(401).end()
 	}
 
@@ -16,7 +18,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 	const posts = await prisma.post.findMany({
 		where: {
 			author: {
-				email: session.user.email
+				email: session?.user?.email ?? undefined,
+				id
 			},
 			subject: subject
 				? {

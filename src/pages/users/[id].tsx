@@ -1,10 +1,8 @@
 import { GetServerSideProps } from 'next'
-import { unstable_getServerSession } from 'next-auth'
 import React from 'react'
 import { Subject } from '@prisma/client'
 
 import { prisma } from '../../lib/prismadb'
-import { getAuthOptions } from '../api/auth/[...nextauth]'
 import * as S from '../../styles/pages/Profile'
 import ProfileContent from '../../components/ProfileContent'
 import { getSubjects } from '../api/subjects'
@@ -30,10 +28,10 @@ const Profile: React.FC<ProfileProps> = (props) => {
 	)
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-	const session = await unstable_getServerSession(req, res, getAuthOptions(res))
+export const getServerSideProps: GetServerSideProps = async (context) => {
+	const userId = context.params?.id as string | undefined
 
-	if (!session?.user?.email) {
+	if (!userId) {
 		return {
 			props: {},
 			redirect: {
@@ -44,7 +42,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 
 	const userPromise = prisma.user.findFirst({
 		where: {
-			email: session.user.email
+			id: userId
 		},
 		include: {
 			favoriteSubject: true,
@@ -57,10 +55,8 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 			answers: {
 				where: {
 					post: {
-						author: {
-							email: {
-								not: session.user.email
-							}
+						authorId: {
+							not: userId
 						}
 					}
 				},
@@ -100,21 +96,15 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 			OR: [
 				{
 					post: {
-						author: {
-							email: session.user.email
-						}
+						authorId: userId
 					}
 				},
 				{
 					answer: {
-						author: {
-							email: session.user.email
-						}
-					},
-					post: {
-						author: {
-							email: {
-								not: session.user.email
+						authorId: userId,
+						post: {
+							authorId: {
+								not: userId
 							}
 						}
 					}

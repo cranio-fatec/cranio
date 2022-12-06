@@ -1,7 +1,7 @@
 import { hash } from 'bcryptjs'
-import { NextApiRequest, NextApiResponse } from 'next'
 
 import { prisma } from '../../../lib/prismadb'
+import { apiHandler } from '../../../utils/apiHandler'
 
 interface UserDTO {
 	username: string
@@ -19,11 +19,10 @@ interface UserDTO {
 	isGoogle?: boolean
 }
 
-export default async function subjects(
-	req: NextApiRequest,
-	res: NextApiResponse
-) {
-	if (req.method === 'POST') {
+export default apiHandler(async (req, res) => {
+	if (req.method === 'GET') {
+		return res.status(200).json({})
+	} else if (req.method === 'POST') {
 		try {
 			const user = await createUser(req.body)
 
@@ -32,10 +31,10 @@ export default async function subjects(
 			return res.status(400).json({ error: err?.message })
 		}
 	} else {
-		res.setHeader('Allow', 'POST')
+		res.setHeader('Allow', 'GET, POST')
 		res.status(405).end('Method not allowed')
 	}
-}
+})
 
 export async function createUser(data: UserDTO): Promise<Record<string, any>> {
 	if (data.password) {

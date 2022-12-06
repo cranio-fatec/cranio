@@ -21,6 +21,10 @@ export default createGlobalStyle`
     color: inherit;
   }
 
+	ul {
+		list-style: none;
+	}
+
 
 
   // React Modal

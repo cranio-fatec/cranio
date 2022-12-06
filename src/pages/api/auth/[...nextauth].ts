@@ -1,3 +1,5 @@
+import { IncomingMessage, ServerResponse } from 'http'
+
 import { NextApiRequest, NextApiResponse } from 'next'
 import NextAuth, { NextAuthOptions } from 'next-auth'
 import nookies from 'nookies'
@@ -7,7 +9,9 @@ import { compare } from 'bcryptjs'
 
 import { prisma } from '../../../lib/prismadb'
 
-export const getAuthOptions = (res: NextApiResponse): NextAuthOptions => ({
+export const getAuthOptions = (
+	res: NextApiResponse | ServerResponse<IncomingMessage>
+): NextAuthOptions => ({
 	providers: [
 		GoogleProvider({
 			clientId: process.env.GOOGLE_CLIENT_ID ?? '',
