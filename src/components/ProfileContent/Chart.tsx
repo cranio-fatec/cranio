@@ -17,7 +17,8 @@ const ProfileChart: React.FC<ProfileChartProps> = ({ subjectsWithCounts }) => {
 				{
 					// label: '# of Votes',
 					data: [] as number[],
-					backgroundColor: [] as string[]
+					backgroundColor: [] as string[],
+					color: [] as string[]
 				}
 			]
 		}
@@ -26,6 +27,9 @@ const ProfileChart: React.FC<ProfileChartProps> = ({ subjectsWithCounts }) => {
 			chartData.labels.push(subject.name)
 			chartData.datasets[0].data.push(subject.posts + subject.answers)
 			chartData.datasets[0].backgroundColor.push(
+				theme.colors.subjects[subject.id as any].text
+			)
+			chartData.datasets[0].color.push(
 				theme.colors.subjects[subject.id as any].text
 			)
 		})
@@ -38,7 +42,15 @@ const ProfileChart: React.FC<ProfileChartProps> = ({ subjectsWithCounts }) => {
 			<StyledPieChart
 				data={data}
 				options={{
-					plugins: { legend: { position: 'right' } },
+					plugins: {
+						legend: {
+							position: 'right',
+							labels: {
+								usePointStyle: true,
+								boxWidth: 8
+							}
+						}
+					},
 					maintainAspectRatio: false
 				}}
 				width="100%"
