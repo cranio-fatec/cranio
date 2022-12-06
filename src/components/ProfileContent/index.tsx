@@ -1,5 +1,10 @@
-import React, { useMemo } from 'react'
-import { MdAdd, MdInfoOutline } from 'react-icons/md'
+import React, { useCallback, useMemo, useState } from 'react'
+import {
+	MdAdd,
+	MdArrowBackIos,
+	MdArrowForwardIos,
+	MdInfoOutline
+} from 'react-icons/md'
 import dynamic from 'next/dynamic'
 import useSWR from 'swr'
 
@@ -13,6 +18,7 @@ import IconQuestion from '../../assets/question.svg'
 import IconArrowUpBold from '../../assets/arrow_up_bold.svg'
 import IconBook from '../../assets/book.svg'
 import { ProfileContentProps, SubjectWithCounts } from './types'
+import { levelsMap } from '../TeacherSignupForm'
 
 const Chart = dynamic(() => import('./Chart'), { ssr: false })
 
@@ -27,6 +33,8 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
 		`/profile/posts?userId=${user.id}`,
 		DEFAULT_OPTIONS
 	)
+
+	const [graduationIndex, setGraduationIndex] = useState(0)
 
 	const { user: loggedUser } = useAuth()
 
@@ -77,6 +85,18 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
 		reactionsSubjectsCount,
 		subjects
 	])
+
+	const handleNextGraduation = useCallback(() => {
+		setGraduationIndex((old) =>
+			old === user.graduations.length - 1 ? 0 : old + 1
+		)
+	}, [user.graduations.length])
+
+	const handlePreviousGraduation = useCallback(() => {
+		setGraduationIndex((old) =>
+			old === 0 ? user.graduations.length - 1 : old - 1
+		)
+	}, [user.graduations.length])
 
 	return (
 		<S.Container>
@@ -142,21 +162,43 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
 							<Chart subjectsWithCounts={parsedParticipation} />
 						</S.ChartWrapper>
 					)}
-					{user.institution && (
-						<S.RightTopItem
-							style={{
-								padding: '32px 32px 42px 32px',
-								justifyContent: 'space-between',
-								alignItems: 'center',
-								maxWidth: 350
-							}}
-						>
-							<strong style={{ alignSelf: 'flex-start' }}>Está cursando</strong>
+					{user.graduations.length ? (
+						<S.GraduationsInstitutionWrapper>
+							<strong style={{ alignSelf: 'flex-start' }}>Graduação</strong>
 							<IconBook />
 							<strong style={{ textAlign: 'center' }}>
-								{user.institution}
+								{levelsMap[user.graduations[graduationIndex].level]} em{' '}
+								{user.graduations[graduationIndex].area}
 							</strong>
-						</S.RightTopItem>
+							{user.graduations.length > 1 && (
+								<>
+									<S.GraduationPrevButton
+										type="button"
+										onClick={handlePreviousGraduation}
+									>
+										<MdArrowBackIos size={20} />
+									</S.GraduationPrevButton>
+									<S.GraduationNextButton
+										type="button"
+										onClick={handleNextGraduation}
+									>
+										<MdArrowForwardIos size={20} />
+									</S.GraduationNextButton>
+								</>
+							)}
+						</S.GraduationsInstitutionWrapper>
+					) : (
+						!!user.institution && (
+							<S.GraduationsInstitutionWrapper>
+								<strong style={{ alignSelf: 'flex-start' }}>
+									Está cursando
+								</strong>
+								<IconBook />
+								<strong style={{ textAlign: 'center' }}>
+									{user.institution}
+								</strong>
+							</S.GraduationsInstitutionWrapper>
+						)
 					)}
 				</S.RightTopWrapper>
 				<S.PostsHeader>

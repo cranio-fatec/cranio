@@ -18,7 +18,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 	const posts = await prisma.post.findMany({
 		where: {
 			author: {
-				email: session?.user?.email ?? undefined,
+				email: !id ? session?.user?.email ?? undefined : undefined,
 				id
 			},
 			subject: subject

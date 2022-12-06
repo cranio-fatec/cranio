@@ -13,7 +13,7 @@ export interface SelectOption {
 	label: string
 }
 
-const levelsMap: Record<GraduationLevel, string> = {
+export const levelsMap: Record<GraduationLevel, string> = {
 	TECNOLOGO: 'Tecnólogo',
 	BACHARELADO: 'Bacharelado',
 	LICENSIATURA: 'Licenciatura',

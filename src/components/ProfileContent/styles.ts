@@ -213,6 +213,40 @@ export const ChartWrapper = styled(RightTopItem)`
 	}
 `
 
+export const GraduationsInstitutionWrapper = styled(RightTopItem)`
+	position: relative;
+	padding: 32px 32px 42px 32px;
+	justify-content: space-between;
+	align-items: center;
+	width: 350px;
+`
+
+export const GraduationButton = styled.button`
+	position: absolute;
+	outline: none;
+	border: none;
+	background-color: transparent;
+	cursor: pointer;
+	width: 26px;
+	height: 26px;
+	transition: color 0.3s;
+
+	&:hover {
+		color: ${({ theme }) => theme.colors.grey_4};
+	}
+
+	top: 50%;
+	transform: translateY(-50%);
+`
+
+export const GraduationNextButton = styled(GraduationButton)`
+	right: 8px;
+`
+
+export const GraduationPrevButton = styled(GraduationButton)`
+	left: 8px;
+`
+
 export const StyledPieChart = styled(Pie)`
 	/* margin-bottom: 40px; */
 `
