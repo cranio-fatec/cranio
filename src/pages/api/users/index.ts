@@ -44,6 +44,10 @@ export async function createUser(data: UserDTO): Promise<Record<string, any>> {
 		data.isGoogle = true
 	}
 
+	if (data.image) {
+		data.image = data.image.replace('=s96-', '=')
+	}
+
 	const checkIfExists = await prisma.user.findFirst({
 		where: {
 			email: data.email

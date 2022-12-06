@@ -11,6 +11,7 @@ import UserAvatar from '../UserAvatar'
 import * as S from './styles'
 import IconQuestion from '../../assets/question.svg'
 import IconArrowUpBold from '../../assets/arrow_up_bold.svg'
+import IconBook from '../../assets/book.svg'
 import { ProfileContentProps, SubjectWithCounts } from './types'
 
 const Chart = dynamic(() => import('./Chart'), { ssr: false })
@@ -135,7 +136,28 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
 			</S.LeftContainer>
 			<S.RightContainer>
 				<S.RightTopWrapper>
-					<Chart subjectsWithCounts={parsedParticipation} />
+					{!!parsedParticipation.length && (
+						<S.ChartWrapper>
+							<h2>Postagens por matérias</h2>
+							<Chart subjectsWithCounts={parsedParticipation} />
+						</S.ChartWrapper>
+					)}
+					{user.institution && (
+						<S.RightTopItem
+							style={{
+								padding: '32px 32px 42px 32px',
+								justifyContent: 'space-between',
+								alignItems: 'center',
+								maxWidth: 350
+							}}
+						>
+							<strong style={{ alignSelf: 'flex-start' }}>Está cursando</strong>
+							<IconBook />
+							<strong style={{ textAlign: 'center' }}>
+								{user.institution}
+							</strong>
+						</S.RightTopItem>
+					)}
 				</S.RightTopWrapper>
 				<S.PostsHeader>
 					<h2>Postagens</h2>

@@ -8,6 +8,7 @@ export const Container = styled.div`
 	display: flex;
 	${containerCenter}
 	padding-top: 40px;
+	background-color: #fbfcfd;
 `
 
 export const Content = styled.div`

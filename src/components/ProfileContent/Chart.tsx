@@ -33,7 +33,19 @@ const ProfileChart: React.FC<ProfileChartProps> = ({ subjectsWithCounts }) => {
 		return chartData
 	}, [subjectsWithCounts])
 
-	return <StyledPieChart data={data} />
+	return (
+		<div style={{ height: 256 }}>
+			<StyledPieChart
+				data={data}
+				options={{
+					plugins: { legend: { position: 'right' } },
+					maintainAspectRatio: false
+				}}
+				width="100%"
+				// height={256}
+			/>
+		</div>
+	)
 }
 
 export default ProfileChart
