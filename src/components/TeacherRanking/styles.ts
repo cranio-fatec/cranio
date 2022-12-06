@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 export const TopTeachers = styled.aside`
 	width: 244px;
-	height: 200px;
+	height: fit-content;
 	margin-left: 44px;
 	background-color: white;
 	padding: 20px;
