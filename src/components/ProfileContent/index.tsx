@@ -134,7 +134,9 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
 				)}
 			</S.LeftContainer>
 			<S.RightContainer>
-				<Chart subjectsWithCounts={parsedParticipation} />
+				<S.RightTopWrapper>
+					<Chart subjectsWithCounts={parsedParticipation} />
+				</S.RightTopWrapper>
 				<S.PostsHeader>
 					<h2>Postagens</h2>
 					{/* <button type="button">
