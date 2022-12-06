@@ -107,7 +107,9 @@ const Teachers: React.FC<DashboardProps> = ({
 											})}
 										</ul>
 										<UserAvatar user={teacher} />
-										<S.TeacherName>
+										<S.TeacherName
+											title={teacher.name ?? teacher.username ?? ''}
+										>
 											{teacher.name ?? teacher.username}
 										</S.TeacherName>
 									</S.TeacherItem>

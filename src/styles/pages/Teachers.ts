@@ -94,6 +94,7 @@ export const TeacherItem = styled(Link)`
 		display: flex;
 		justify-content: space-between;
 		margin-bottom: 16px;
+		width: 100%;
 
 		${SubjectItem} {
 			cursor: default;
@@ -126,13 +127,18 @@ export const TeacherItem = styled(Link)`
 
 export const TeacherName = styled.span`
 	font-weight: 900;
-	font-size: 36px;
+	font-size: 28px;
 	line-height: 30px;
 	/* or 83% */
 
 	text-align: center;
 	letter-spacing: 0.15px;
 	margin-top: 16px;
+
+	display: -webkit-box;
+	-webkit-line-clamp: 1;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
 
 	color: ${({ theme }) => theme.colors.yellow};
 `

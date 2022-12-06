@@ -102,7 +102,9 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
 		<S.Container>
 			<S.LeftContainer>
 				<UserAvatar user={user} />
-				<S.UserName>{user.name ?? user.username}</S.UserName>
+				<S.UserName title={user.name ?? user.username ?? ''}>
+					{user.name ?? user.username}
+				</S.UserName>
 				<S.SubjectInfoList>
 					{bestSubjectName && (
 						<li>

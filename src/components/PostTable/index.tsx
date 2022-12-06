@@ -37,7 +37,9 @@ const PostTable: React.FC<PostTableProps> = ({ posts }) => {
 										{post.closed ? 'Fechada' : 'Aberta'}
 									</PostStatus>
 								</div>
-								<div className="title">{post.title}</div>
+								<div className="title" title={post.title}>
+									{post.title}
+								</div>
 								<div>{post.subject.name}</div>
 							</Link>
 						</td>
