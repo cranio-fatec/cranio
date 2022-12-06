@@ -137,15 +137,15 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
 										{participation.name}
 									</S.SubjectItem>
 									<S.CountsWrapper>
-										<S.CountItemWrapper>
+										<S.CountItemWrapper title="Postagens/perguntas">
 											<IconQuestion />
 											{participation.posts}
 										</S.CountItemWrapper>
-										<S.CountItemWrapper>
+										<S.CountItemWrapper title="Respostas">
 											<MdInfoOutline size={24} />
 											{participation.answers}
 										</S.CountItemWrapper>
-										<S.CountItemWrapper>
+										<S.CountItemWrapper title="Reações positivas">
 											<IconArrowUpBold />
 											{participation.reactions}
 										</S.CountItemWrapper>

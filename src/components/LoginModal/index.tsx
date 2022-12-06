@@ -85,7 +85,17 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onRequestClose }) => {
 						required
 						ref={passwordInputRef}
 					/>
-					<Link href="/forgot">Esqueci minha senha</Link>
+					<Link
+						href="#"
+						onClick={(e) => {
+							e.preventDefault()
+							toast('Em breve!', {
+								icon: '⚠️'
+							})
+						}}
+					>
+						Esqueci minha senha
+					</Link>
 					<S.ButtonsContainer>
 						<Link href="/signup">
 							<Button

@@ -58,7 +58,7 @@ const PostItem: React.FC<PostItemProps> = ({
 	return (
 		<S.Container isOdd={isOdd} isLoading={content.loading}>
 			<S.UserInfo className="user-info">
-				<Link href={`/profile/${content.authorId}`}>
+				<Link href={`/users/${content.authorId}`}>
 					<UserAvatar user={content.author} />
 					<span>{content.author.username ?? content.author.name}</span>
 				</Link>
