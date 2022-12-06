@@ -1,5 +1,5 @@
 import React, { forwardRef } from 'react'
-import { FaUser, FaUserCog } from 'react-icons/fa'
+import { FaUser } from 'react-icons/fa'
 import { IoMdDocument } from 'react-icons/io'
 import { MdLogout } from 'react-icons/md'
 import { signOut } from 'next-auth/react'
@@ -21,13 +21,13 @@ const ProfilePopout = ({ isOpen }: ProfilePopoutProps, ref: any) => {
 							Meu perfil
 						</Link>
 					</li>
-					<li>
-						{/* <Link href="/settings"> */}
+					{/* <li>
+						{/* <Link href="/settings">
 						<Link href="/profile">
 							<FaUserCog size={size} />
 							Configurações
 						</Link>
-					</li>
+					</li> */}
 					<li>
 						<Link href="/profile/posts">
 							<IoMdDocument size={size} /> Minhas postagens
