@@ -2,6 +2,7 @@ import { GetServerSideProps } from 'next'
 import { unstable_getServerSession } from 'next-auth'
 import React from 'react'
 import { Subject } from '@prisma/client'
+import { NextSeo } from 'next-seo'
 
 import { prisma } from '../../lib/prismadb'
 import { getAuthOptions } from '../api/auth/[...nextauth]'
@@ -21,6 +22,7 @@ interface ProfileProps {
 const Profile: React.FC<ProfileProps> = (props) => {
 	return (
 		<>
+			<NextSeo title="Meu perfil" noindex nofollow />
 			<S.Container>
 				<S.Content>
 					<ProfileContent {...props} />

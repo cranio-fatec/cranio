@@ -1,6 +1,7 @@
 import { GetServerSideProps } from 'next'
 import React from 'react'
 import { Subject } from '@prisma/client'
+import { NextSeo } from 'next-seo'
 
 import { prisma } from '../../lib/prismadb'
 import * as S from '../../styles/pages/Profile'
@@ -19,6 +20,7 @@ interface ProfileProps {
 const Profile: React.FC<ProfileProps> = (props) => {
 	return (
 		<>
+			<NextSeo title={props.user.name ?? props.user.username ?? ''} />
 			<S.Container>
 				<S.Content>
 					<ProfileContent {...props} />
